@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcBlanketLib", "MvcBlanketLib\MvcBlanketLib.csproj", "{3972656F-3903-4CFB-AD2E-82ABC0F4A04F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcBlanketLibTest", "MvcBlanketLibTest\MvcBlanketLibTest.csproj", "{B72FF7EA-31FB-47DE-BCD0-8B81DFC6472D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E6467A42-2877-499D-82BE-9B334AEBE91A}"
+	ProjectSection(SolutionItems) = preProject
+		Local.testsettings = Local.testsettings
+		MvcBlanket.vsmdi = MvcBlanket.vsmdi
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcBlanket.Security", "MvcBlanket.Security\MvcBlanket.Security.csproj", "{A48C5B66-12B8-4613-888E-23530D26E174}"
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = MvcBlanket.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3972656F-3903-4CFB-AD2E-82ABC0F4A04F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3972656F-3903-4CFB-AD2E-82ABC0F4A04F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3972656F-3903-4CFB-AD2E-82ABC0F4A04F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3972656F-3903-4CFB-AD2E-82ABC0F4A04F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B72FF7EA-31FB-47DE-BCD0-8B81DFC6472D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B72FF7EA-31FB-47DE-BCD0-8B81DFC6472D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B72FF7EA-31FB-47DE-BCD0-8B81DFC6472D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B72FF7EA-31FB-47DE-BCD0-8B81DFC6472D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A48C5B66-12B8-4613-888E-23530D26E174}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A48C5B66-12B8-4613-888E-23530D26E174}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A48C5B66-12B8-4613-888E-23530D26E174}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A48C5B66-12B8-4613-888E-23530D26E174}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

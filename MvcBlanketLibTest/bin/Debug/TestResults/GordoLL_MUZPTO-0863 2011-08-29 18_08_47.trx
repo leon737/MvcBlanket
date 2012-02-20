@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="d15b52ed-6c2e-4159-b0df-30d30788f623" name="GordoLL@MUZPTO-0863 2011-08-29 18:08:47" runUser="IFDK\GordoLL" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="Local" id="752bf8a9-e3eb-47d8-b31a-b717c5a5dbe5">
+    <Description>These are default test settings for a local test run.</Description>
+    <Deployment enabled="false" runDeploymentRoot="GordoLL_MUZPTO-0863 2011-08-29 18_08_47" />
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+      </AgentRule>
+    </Execution>
+  </TestSettings>
+  <Times creation="2011-08-29T18:08:47.4609592+04:00" queuing="2011-08-29T18:08:48.1280259+04:00" start="2011-08-29T18:08:48.3120443+04:00" finish="2011-08-29T18:08:48.6340765+04:00" />
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" error="0" failed="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="TestIdentityAssociative" storage="c:\users\gordoll\documents\visual studio 2010\projects\mvcblanket\mvcblanketlibtest\bin\debug\mvcblanketlibtest.dll" id="cb34eea1-8786-7632-5975-7ba6c44091d5">
+      <Execution timeOut="1800000" id="2863300a-7686-42bb-8512-9ae519cacc5b" />
+      <TestMethod codeBase="c:/users/gordoll/documents/visual studio 2010/Projects/MvcBlanket/MvcBlanketLibTest/bin/Debug/MvcBlanketLibTest.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="MvcBlanketLibTest.IdentityMonadsTest, MvcBlanketLibTest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="TestIdentityAssociative" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="cb34eea1-8786-7632-5975-7ba6c44091d5" executionId="2863300a-7686-42bb-8512-9ae519cacc5b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="2863300a-7686-42bb-8512-9ae519cacc5b" testId="cb34eea1-8786-7632-5975-7ba6c44091d5" testName="TestIdentityAssociative" computerName="MUZPTO-0863" duration="00:00:00.0489012" startTime="2011-08-29T18:08:48.4430574+04:00" endTime="2011-08-29T18:08:48.5560687+04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2863300a-7686-42bb-8512-9ae519cacc5b">
+    </UnitTestResult>
+  </Results>
+</TestRun>

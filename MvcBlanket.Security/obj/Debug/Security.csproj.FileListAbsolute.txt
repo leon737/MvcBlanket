@@ -1,0 +1,30 @@
+C:\Users\gordoll\Documents\Visual Studio 2008\Projects\Satelite Web Sites\EasyPartner\Security\bin\Debug\Security.dll.config
+C:\Users\gordoll\Documents\Visual Studio 2008\Projects\Satelite Web Sites\EasyPartner\Security\bin\Debug\Security.dll
+C:\Users\gordoll\Documents\Visual Studio 2008\Projects\Satelite Web Sites\EasyPartner\Security\bin\Debug\Security.pdb
+C:\Users\gordoll\Documents\Visual Studio 2008\Projects\Satelite Web Sites\EasyPartner\Security\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\gordoll\Documents\Visual Studio 2008\Projects\Satelite Web Sites\EasyPartner\Security\obj\Debug\Security.dll
+C:\Users\gordoll\Documents\Visual Studio 2008\Projects\Satelite Web Sites\EasyPartner\Security\obj\Debug\Security.pdb
+C:\Users\gordoll\Documents\Visual Studio 2010\Projects\LukoilArtContest\Security\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\gordoll\Documents\Visual Studio 2010\Projects\LukoilArtContest\Security\obj\Debug\Security.dll
+C:\Users\gordoll\Documents\Visual Studio 2010\Projects\LukoilArtContest\Security\obj\Debug\Security.pdb
+C:\Users\gordoll\Documents\Visual Studio 2010\Projects\LukoilArtContest\Security\bin\Debug\Security.dll.config
+C:\Users\gordoll\Documents\Visual Studio 2010\Projects\LukoilArtContest\Security\bin\Debug\Security.dll
+C:\Users\gordoll\Documents\Visual Studio 2010\Projects\LukoilArtContest\Security\bin\Debug\Security.pdb
+C:\Users\leon\Documents\Visual Studio 2010\Projects\LukoilArtContest\Security\bin\Debug\Security.dll.config
+C:\Users\leon\Documents\Visual Studio 2010\Projects\LukoilArtContest\Security\bin\Debug\Security.dll
+C:\Users\leon\Documents\Visual Studio 2010\Projects\LukoilArtContest\Security\bin\Debug\Security.pdb
+C:\Users\leon\Documents\Visual Studio 2010\Projects\LukoilArtContest\Security\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\leon\Documents\Visual Studio 2010\Projects\LukoilArtContest\Security\obj\Debug\Security.dll
+C:\Users\leon\Documents\Visual Studio 2010\Projects\LukoilArtContest\Security\obj\Debug\Security.pdb
+C:\Users\gordoll\Documents\Visual Studio 2010\Projects\LukoilTenders\Security\bin\Debug\Security.dll.config
+C:\Users\gordoll\Documents\Visual Studio 2010\Projects\LukoilTenders\Security\bin\Debug\Security.dll
+C:\Users\gordoll\Documents\Visual Studio 2010\Projects\LukoilTenders\Security\bin\Debug\Security.pdb
+C:\Users\gordoll\Documents\Visual Studio 2010\Projects\LukoilTenders\Security\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\gordoll\Documents\Visual Studio 2010\Projects\LukoilTenders\Security\obj\Debug\Security.dll
+C:\Users\gordoll\Documents\Visual Studio 2010\Projects\LukoilTenders\Security\obj\Debug\Security.pdb
+C:\Users\leon\Documents\Visual Studio 2010\Projects\LukoilTenders\Security\bin\Debug\Security.dll.config
+C:\Users\leon\Documents\Visual Studio 2010\Projects\LukoilTenders\Security\bin\Debug\Security.dll
+C:\Users\leon\Documents\Visual Studio 2010\Projects\LukoilTenders\Security\bin\Debug\Security.pdb
+C:\Users\leon\Documents\Visual Studio 2010\Projects\LukoilTenders\Security\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\leon\Documents\Visual Studio 2010\Projects\LukoilTenders\Security\obj\Debug\Security.dll
+C:\Users\leon\Documents\Visual Studio 2010\Projects\LukoilTenders\Security\obj\Debug\Security.pdb
