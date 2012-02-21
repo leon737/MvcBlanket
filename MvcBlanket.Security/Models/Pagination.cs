@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Collections;
 
-namespace Security.Models
+namespace MvcBlanket.Security.Models
 {
     internal class Pagination<T> : IPagination<T>
     {
         public int TotalEntries { get; set; }
-        IEnumerable<T> elements;
+        readonly IEnumerable<T> elements;
 
         public Pagination(IEnumerable<T> elements)
         {
@@ -19,10 +16,10 @@ namespace Security.Models
 
         public IEnumerator<T> GetEnumerator()
         {
-            return ((IEnumerable<T>)elements).GetEnumerator();
+            return elements.GetEnumerator();
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable)elements).GetEnumerator();
         }

@@ -1,0 +1,110 @@
+<Configuration>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Properties/f:AssemblyInfo.cs" caret="1533" fromTop="19" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:Maybe.cs" caret="422" fromTop="21" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:ChooseOperand.cs" caret="504" fromTop="23" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:Identity.cs" caret="207" fromTop="10" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:MonadExtensions.cs" caret="219" fromTop="11" />
+      <File id="B72FF7EA-31FB-47DE-BCD0-8B81DFC6472D/f:IdentityMonadsTest.cs" caret="1643" fromTop="3" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:MonadExtensions.cs" caret="669" fromTop="15" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:MonadExtensions.cs" caret="944" fromTop="22" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:MonadExtensions.cs" caret="1156" fromTop="28" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:MonadExtensions.cs" caret="1372" fromTop="34" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:MonadExtensions.cs" caret="1553" fromTop="41" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:MonadExtensions.cs" caret="1781" fromTop="43" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:MonadExtensions.cs" caret="2040" fromTop="40" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:MonadExtensions.cs" caret="2303" fromTop="40" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:MonadExtensions.cs" caret="190" fromTop="7" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:MonadExtensions.cs" caret="335" fromTop="12" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:MonadExtensions.cs" caret="430" fromTop="16" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:MonadExtensions.cs" caret="2484" fromTop="22" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:MonadExtensions.cs" caret="2647" fromTop="27" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:MonadExtensions.cs" caret="3378" fromTop="37" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:MonadExtensions.cs" caret="3508" fromTop="44" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:ChooseOperand.cs" caret="504" fromTop="23" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:MonadExtensions.cs" caret="3923" fromTop="22" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:MonadExtensions.cs" caret="5745" fromTop="48" />
+      <File id="B72FF7EA-31FB-47DE-BCD0-8B81DFC6472D/f:IdentityMonadsTest.cs" caret="170" fromTop="5" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Properties/f:AssemblyInfo.cs" caret="1530" fromTop="19" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:MonadExtensions.cs" caret="3176" fromTop="41" />
+      <File id="B72FF7EA-31FB-47DE-BCD0-8B81DFC6472D/f:IdentityMonadsTest.cs" caret="2110" fromTop="28" />
+      <File id="3972656F-3903-4CFB-AD2E-82ABC0F4A04F/d:Fluent/f:MonadExtensions.cs" caret="2855" fromTop="25" />
+      <File id="B72FF7EA-31FB-47DE-BCD0-8B81DFC6472D/f:IdentityMonadsTest.cs" caret="2100" fromTop="18" />
+      <File id="B72FF7EA-31FB-47DE-BCD0-8B81DFC6472D/f:IdentityMonadsTest.cs" caret="1074" fromTop="32" />
+      <File id="B72FF7EA-31FB-47DE-BCD0-8B81DFC6472D/f:IdentityMonadsTest.cs" caret="1648" fromTop="34" />
+      <File id="B72FF7EA-31FB-47DE-BCD0-8B81DFC6472D/f:IdentityMonadsTest.cs" caret="1367" fromTop="27" />
+      <File id="B72FF7EA-31FB-47DE-BCD0-8B81DFC6472D/f:IdentityMonadsTest.cs" caret="1502" fromTop="23" />
+      <File id="B72FF7EA-31FB-47DE-BCD0-8B81DFC6472D/f:IdentityMonadsTest.cs" caret="350" fromTop="7" />
+      <File id="B72FF7EA-31FB-47DE-BCD0-8B81DFC6472D/f:IdentityMonadsTest.cs" caret="528" fromTop="15" />
+    </RecentEdits>
+  </RecentFiles>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <UnitTestRunner>
+    <Providers />
+  </UnitTestRunner>
+  <UnitTestRunnerNUnit>
+    <NUnitInstallDir IsNull="False" />
+    <UseAddins>Never</UseAddins>
+  </UnitTestRunnerNUnit>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="Default">
+      <Item value="int" priority="12" />
+      <Item value="var" priority="5" />
+      <Item value="using" priority="0" />
+      <Item value="MvcBlanketLib.Fluent" priority="0" />
+      <Item value="Assert`0" priority="3" />
+      <Item value="result" priority="3" />
+      <Item value="valueType" priority="0" />
+      <Item value="TestMethod" priority="3" />
+      <Item value="public" priority="3" />
+      <Item value="void" priority="3" />
+      <Item value="string" priority="0" />
+      <Item value="refType" priority="1" />
+      <Item value="Func" priority="4" />
+      <Item value="Identity" priority="2" />
+      <Item value="const" priority="1" />
+      <Item value="original" priority="1" />
+      <Item value="assembly" priority="0" />
+      <Item value="Lazy" priority="0" />
+      <Item value="m" priority="3" />
+      <Item value="f" priority="4" />
+      <Item value="new" priority="0" />
+      <Item value="MonadExtensions`0" priority="0" />
+      <Item value="aaa" priority="0" />
+      <Item value="func" priority="0" />
+      <Item value="leftSide" priority="0" />
+      <Item value="rightSide" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@Microsoft.VisualStudio.TestTools.UnitTesting.Assert">
+      <Item value="AreEqual`0" priority="3" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:MvcBlanketLib.Fluent.Identity`1">
+      <Item value="Value" priority="2" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.String">
+      <Item value="ToIdentity`1" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Int32">
+      <Item value="ToIdentity`1" priority="1" />
+      <Item value="Identity`1" priority="2" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@MvcBlanketLib.Fluent.MonadExtensions">
+      <Item value="Identity`1" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Func`2">
+      <Item value="Compose`3" priority="4" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+</Configuration>

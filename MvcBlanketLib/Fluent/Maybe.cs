@@ -17,7 +17,7 @@ namespace MvcBlanketLib.Fluent
 		public Maybe(T value)
 		{
 			Value = value;
-			HasValue = true;
+            HasValue = Value != null;
 		}
 		
 	}

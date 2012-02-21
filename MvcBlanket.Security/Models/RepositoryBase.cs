@@ -1,23 +1,17 @@
 ﻿using System.Data.Linq;
+using System;
 
-namespace Security.Models
+namespace MvcBlanket.Security.Models
 {
     internal abstract class RepositoryBase<TDataContext>
         where TDataContext : DataContext, new()
     {
-        object syncLock = new object();
-        TDataContext context;
+
+        readonly Lazy<TDataContext> context = new Lazy<TDataContext>();
 
         protected TDataContext Context
         {
-            get
-            {
-                if (context == null)
-                    lock (syncLock)
-                        if (context == null)
-                            context = new TDataContext();
-                return context;
-            }
+            get { return context.Value; }
         }
 
         protected void Submit()

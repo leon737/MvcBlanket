@@ -1,16 +1,4 @@
-﻿/*******************************************************************\
-* Module Name: Lt.Helpers
-* 
-* File Name: Helpers/ParameterRebinder.cs
-*
-* Warnings:
-*
-* Issues:
-*
-* Created:  09 Jul 2011
-* Author:   Leonid Gordo  [ leonardpt@gmail.com ]
-*
-\***********************************************************************/
+﻿
 
 using System.Collections.Generic;
 using System.Linq.Expressions;

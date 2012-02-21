@@ -31,8 +31,6 @@ namespace Mvc.ResumingActionResults
 
         public string CustomDispositionType { get; set; }
 
-        public Action<long, ResumingRequest> PartSentCallback { get; set; }
-
 		public override void ExecuteResult(ControllerContext context)
 		{
 			if (context == null)
@@ -51,16 +49,11 @@ namespace Mvc.ResumingActionResults
 			{
 				using (FileContents)
 				{
-                    bool allSent;
 					if (resumingRequest.IsRangeRequest)
-                        allSent = WritePartialContent(context, FileContents, resumingRequest);
+						WritePartialContent(context, FileContents, resumingRequest);
 					else
-                        allSent = WriteFullContent(context, FileContents);
-                    if (PartSentCallback != null && allSent)
-                        PartSentCallback(FileContents.Length, resumingRequest);
+						WriteFullContent(context, FileContents);
 				}
-                
-
 			}
 		}
 
@@ -190,7 +183,7 @@ namespace Mvc.ResumingActionResults
 			if (!string.IsNullOrEmpty(resumingRequest.FileName))
 			{
 					context.HttpContext.Response.AddHeader(
-						  "Content-Disposition", string.Format((CustomDispositionType ?? "inline") + "; filename=\"{0}\"", 
+						  "Content-Disposition", string.Format(CustomDispositionType ?? "inline" + "; filename=\"{0}\"", 
 						  !string.IsNullOrWhiteSpace(CustomDisposition) ? CustomDisposition
 						  :resumingRequest.FileName));
 			}
@@ -216,11 +209,11 @@ namespace Mvc.ResumingActionResults
 		/// </summary>
 		/// <param name="context">The executing controller context.</param>
 		/// <param name="fileContent">The stream from which the byte data is read.</param>
-		public virtual bool WriteFullContent(ControllerContext context, Stream fileContent)
+		public virtual void WriteFullContent(ControllerContext context, Stream fileContent)
 		{
 			context.HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
 
-            return WriteBinaryData(context, fileContent, 0, fileContent.Length - 1) == 0;
+			WriteBinaryData(context, fileContent, 0, fileContent.Length - 1);
 		}
 
 
@@ -230,7 +223,7 @@ namespace Mvc.ResumingActionResults
 		/// <param name="context">The executing controller context.</param>
 		/// <param name="fileContent">The stream from which the byte data is read.</param>
 		// See http://www.w3.org/Protocols/rfc1341/7_2_Multipart.html for multipart format information
-		public virtual bool WritePartialContent(ControllerContext context, Stream fileContent, ResumingRequest resumingRequest)
+		public virtual void WritePartialContent(ControllerContext context, Stream fileContent, ResumingRequest resumingRequest)
 		{
 			var response = context.HttpContext.Response;
 
@@ -245,12 +238,10 @@ namespace Mvc.ResumingActionResults
 						  fileContent.Length)
 					 );
 
-            bool allSent = true;
-
 			foreach (var range in resumingRequest.Ranges)
 			{
 				if (!response.IsClientConnected)
-					return false;
+					return;
 
 				if (resumingRequest.IsMultipartRequest)
 				{
@@ -266,12 +257,10 @@ namespace Mvc.ResumingActionResults
 					response.Output.WriteLine();
 				}
 
-				allSent = WriteBinaryData(context, fileContent, range.StartByte, range.EndByte) == 0;
+				WriteBinaryData(context, fileContent, range.StartByte, range.EndByte);
 
 				if (resumingRequest.IsMultipartRequest)
 					response.Output.WriteLine();
-
-                if (!allSent) break;
 			}
 
 			if (resumingRequest.IsMultipartRequest)
@@ -280,7 +269,6 @@ namespace Mvc.ResumingActionResults
 				response.Output.WriteLine();
 			}
 
-            return allSent;
 		}
 
 		/// <summary>
@@ -291,7 +279,7 @@ namespace Mvc.ResumingActionResults
 		/// <param name="fileContent">The Stream from which to write data to the Response.OutputStream.</param>
 		/// <param name="startIndex">The position from which to start reading content.</param>
 		/// <param name="endIndex">The last index position from which to read content.</param>
-		private long WriteBinaryData(ControllerContext context, Stream fileContent, long startIndex, long endIndex)
+		private void WriteBinaryData(ControllerContext context, Stream fileContent, long startIndex, long endIndex)
 		{
 			var response = context.HttpContext.Response;
 
@@ -312,7 +300,7 @@ namespace Mvc.ResumingActionResults
 						count = fileContent.Read(buffer, 0, buffer.Length);
 
 					if (count == 0) //stream content is shorter than expected
-						return -1;
+						return;
 
 					response.OutputStream.Write(buffer, 0, count);
 
@@ -320,15 +308,14 @@ namespace Mvc.ResumingActionResults
 				}
 				catch (IndexOutOfRangeException)
 				{
-					response.Flush();
-					return -1;
+					response.Output.Flush();
+					return;
 				}
 				finally
 				{
-					response.Flush();
+					response.Output.Flush();
 				}
 			}
-            return bytesRemaining;
 		}
 	}
 }

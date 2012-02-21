@@ -1,6 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Database Name="EasyPartner" Class="SecurityDataContext" AccessModifier="Internal" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=muz-dvp02srv;Initial Catalog=EasyPartner;Integrated Security=True" SettingsObjectName="Security.Properties.Settings" SettingsPropertyName="SecurityConnectionString" Provider="System.Data.SqlClient" />
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="EasyPartner" ContextNamespace="MvcBlanket.Security.DataAccess" Class="SecurityDataContext" AccessModifier="Internal" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=sqlserver;Initial Catalog=database;Integrated Security=True" SettingsObjectName="MvcBlanket.Security.Properties.Settings" SettingsPropertyName="SecurityConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="Security.Role" Member="Roles">
     <Type Name="Role">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -24,8 +23,8 @@
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="GroupId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="Login" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="Password" Type="System.Data.Linq.Binary" DbType="Binary(16)" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="Salt" Type="System.String" DbType="NVarChar(4) NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.Data.Linq.Binary" DbType="Binary(64)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="Salt" Type="System.Byte[]" DbType="binary(8) NOT NULL" CanBeNull="false" />
       <Column Name="PasswordQuestion" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
       <Column Name="PasswordAnswer" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
       <Column Name="FirstName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />

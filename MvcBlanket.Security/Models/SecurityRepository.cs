@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Security.DataAccess.DataContexts;
-using Security.Providers;
+using MvcBlanket.Security.DataAccess;
+using MvcBlanket.Security.DataAccess.DataContexts;
+using MvcBlanket.Security.Providers;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Security.Models
+namespace MvcBlanket.Security.Models
 {
     internal class SecurityRepository : RepositoryBase<SecurityDataContext>
     {
@@ -36,8 +36,7 @@ namespace Security.Models
 
             user.Login = model.Login;
             user.EMail = model.EMail;
-            if (!string.IsNullOrEmpty(model.Salt))
-                user.Salt = model.Salt;
+            if (model.Salt != null) user.Salt = model.Salt;
             user.FirstName = model.FirstName;
             user.SecondName = model.SecondName;
             user.LastName = model.LastName;
@@ -79,8 +78,7 @@ namespace Security.Models
 
         public int GetNumberOfUsersOnline(int intervalInMinutes)
         {
-            return Context.Individuals
-                .Where(u => u.LastActivity > DateTime.UtcNow.AddMinutes(-intervalInMinutes)).Count();
+            return Context.Individuals.Count(u => u.LastActivity > DateTime.UtcNow.AddMinutes(-intervalInMinutes));
         }
 
         public User GetUser(string login)
@@ -105,7 +103,7 @@ namespace Security.Models
 
         public T GetUserByLogin<T>(string login, Func<User, T> selector)
         {
-            return GetUser<T>(login, selector);
+            return GetUser(login, selector);
         }
 
         public T GetUserByEmail<T>(string email, Func<User, T> selector)
@@ -170,7 +168,7 @@ namespace Security.Models
 
         public IEnumerable<string> GetLoginsAssignedToRole(string roleName)
         {
-            return Context.Roles.Where(r => r.Name == roleName).First()
+            return Context.Roles.First(r => r.Name == roleName)
                 .User2Roles.Select(ur => ur.User.Login);
         }
 
@@ -225,8 +223,9 @@ namespace Security.Models
             }
             else
             {
-                ((PropertyInfo)((((UnaryExpression)(expression.Body))
-                    .Operand as MemberExpression).Member)).SetValue(user, value, null);
+                var memberExpression = ((UnaryExpression) (expression.Body)).Operand as MemberExpression;
+                if (memberExpression != null)
+                    ((PropertyInfo)(memberExpression.Member)).SetValue(user, value, null);
             }
             return SaveUser(user);
         }

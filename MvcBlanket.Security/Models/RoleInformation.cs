@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Security.Models
+﻿namespace MvcBlanket.Security.Models
 {
     class RoleInformation
     {
@@ -12,8 +7,8 @@ namespace Security.Models
 
         public override bool Equals(object obj)
         {
-            RoleInformation other = obj as RoleInformation;
-            if (obj == null) return false;
+            var other = obj as RoleInformation;
+            if (other == null) return false;
             return RoleName == other.RoleName;
         }
 

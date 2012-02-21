@@ -54,6 +54,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionFilters\NavigatedAttribute.cs" />
+    <Compile Include="ActionFilters\SelectFilterAttribute.cs" />
     <Compile Include="BackgroundTasks\BackgroundTask.cs" />
     <Compile Include="BackgroundTasks\BackgroundTasksManager.cs" />
     <Compile Include="BackgroundTasks\BackgroundTasksManagerSettings.cs" />
@@ -75,6 +77,10 @@
     <Compile Include="Mail\IMailStorage.cs" />
     <Compile Include="Mail\Mail.cs" />
     <Compile Include="Mail\MailService.cs" />
+    <Compile Include="PageFilters\IPageFiltersModel.cs" />
+    <Compile Include="PageFilters\LinqFilterExtensions.cs" />
+    <Compile Include="PageFilters\PageFilter.cs" />
+    <Compile Include="PageFilters\PageFilterNotSelectedValueAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResumingActionResult\ByteRange.cs" />
     <Compile Include="ResumingActionResult\ResumingActionResultBase.cs" />

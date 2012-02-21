@@ -2,10 +2,10 @@
 using System.Configuration.Provider;
 using System.Linq;
 using System.Web.Security;
-using Security.DataAccess.DataContexts;
-using Security.Models;
+using MvcBlanket.Security.DataAccess.DataContexts;
+using MvcBlanket.Security.Models;
 
-namespace Security.Providers
+namespace MvcBlanket.Security.Providers
 {
 	public class AccountRoleProvider : RoleProvider
 	{		

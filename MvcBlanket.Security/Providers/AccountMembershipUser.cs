@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Security;
-using Security.DataAccess;
-using Security.DataAccess.DataContexts;
-using Security.Models;
+using MvcBlanket.Security.DataAccess.DataContexts;
+using MvcBlanket.Security.Helpers;
+using MvcBlanket.Security.Models;
 using System.Collections.Generic;
 
-namespace Security.Providers
+namespace MvcBlanket.Security.Providers
 {
     public class AccountMembershipUser : MembershipUser
     {
@@ -14,9 +14,9 @@ namespace Security.Providers
         public string FirstName { get; private set; }
         public string SecondName { get; private set; }
         public string LastName { get; private set; }
-        public string Salt { get; private set; }
+        public byte[] Salt { get; private set; }
 
-        object syncLock = new object();
+        readonly object syncLock = new object();
         User storedEntity;
 
         protected User StoredEntity
@@ -31,7 +31,7 @@ namespace Security.Providers
             }
         }
 
-        internal AccountMembershipUser(int id, string login, string salt, string firstName, string secondName, string lastName,
+        internal AccountMembershipUser(int id, string login, byte[] salt, string firstName, string secondName, string lastName,
             string email, DateTime regDate, bool isActive)
             : base("AccountMembershipProvider",
             login, id, email, null, null, true, !isActive, regDate, DateTime.MinValue, DateTime.MinValue,
@@ -73,13 +73,9 @@ namespace Security.Providers
 
         public override bool ChangePassword(string oldPassword, string newPassword)
         {
-            if (ValidatePassword(oldPassword))
-            {
-                SavePassword(newPassword);
-                return true;
-            }
-            else
-                return false;
+            if (!ValidatePassword(oldPassword)) return false;
+            SavePassword(newPassword);
+            return true;
         }
 
         public bool ChangePassword(string newPassword)
@@ -99,18 +95,13 @@ namespace Security.Providers
             if (passwordFromDb == null || passwordFromDb.Length == 0)
                 return true;
             byte[] validatedPassword = HashPassword(password);
-            if (validatedPassword.Length != passwordFromDb.Length) return false;
-            for (int i = 0; i < validatedPassword.Length; i++)
-            {
-                if (validatedPassword[i] != passwordFromDb[i]) return false;
-            }
-            return true;
+            return passwordFromDb.SequenceEqual(validatedPassword);
         }
 
         new byte[] GetPassword()
         {
             var password = new SecurityRepository().GetUser(Id, u => u.Password);
-            if (password == null || password.Length != 16) return new byte[0];
+            if (password == null || password.Length != 64) return new byte[0];
             return password.ToArray();
         }
 
@@ -258,19 +249,19 @@ namespace Security.Providers
             get
             {
                 return GetRoles(StoredEntity,
-                    new List<RoleInformation>(), Enumerable.Empty<int>())
+                    new List<RoleInformation>(), new List<int>())
                     .Where(r => r.Access).Select(r => r.RoleName).ToArray();
             }
         }
 
-        private IEnumerable<User> GetGroups(User user, IEnumerable<int> visitedUsers)
+        private IEnumerable<User> GetGroups(User user, IList<int> visitedUsers)
         {
             return user.ParentUsers.Where(v => !visitedUsers.Contains(v.ParentUserId))
                 .Select(v => v.ParentUser);
         }
 
         private IList<RoleInformation> GetRoles(User user, IList<RoleInformation> roles,
-            IEnumerable<int> visitedUsers)
+            IList<int> visitedUsers)
         {
             var localRoles = user.User2Roles.Select(v => new RoleInformation { RoleName = v.Role.Name, Access = v.Access });
             foreach (var localRole in localRoles)
@@ -287,7 +278,7 @@ namespace Security.Providers
             }
             foreach (var parentUser in GetGroups(user, visitedUsers))
             {
-                visitedUsers = visitedUsers.Union(new[] { parentUser.Id });
+                visitedUsers.Add(parentUser.Id);
                 roles = GetRoles(parentUser, roles, visitedUsers);
             }
             return roles;

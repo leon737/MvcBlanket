@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace Security.Models
+namespace MvcBlanket.Security.Models
 {
     internal interface IPagination<T> : IEnumerable<T>
     {

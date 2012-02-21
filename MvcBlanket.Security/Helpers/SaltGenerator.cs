@@ -1,26 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 
-namespace Security
+namespace MvcBlanket.Security.Helpers
 {
     internal static class SaltGenerator
     {
-        const int SaltLength = 4;
-        public static string GenerateSalt()
+        const int SaltLength = 8;
+        public static byte[] GenerateSalt()
         {
-            RNGCryptoServiceProvider cryptoServiceProvider = new RNGCryptoServiceProvider();
-            byte[] buffer = new byte[SaltLength / 2];
+            var cryptoServiceProvider = new RNGCryptoServiceProvider();
+            var buffer = new byte[SaltLength];
             cryptoServiceProvider.GetBytes(buffer);
-            StringBuilder builder = new StringBuilder(SaltLength);
-            foreach (var item in buffer)
-            {
-                builder.Append(Char.ConvertFromUtf32((((int)item) & 0x0F) << 4));
-                builder.Append(Char.ConvertFromUtf32(((int)item) & 0xF0));
-            }
-            return builder.ToString();
+            return buffer;
         }
     }
 }

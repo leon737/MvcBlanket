@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Security.DataAccess.DataContexts;
-
-namespace Security.DataAccess
+﻿namespace MvcBlanket.Security.DataAccess
 {
 	internal static class DataAccessCore
 	{
