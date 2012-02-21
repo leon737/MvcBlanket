@@ -1,9 +1,0 @@
-C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanketLib\bin\Release\MvcBlanketLib.dll
-C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanketLib\bin\Release\MvcBlanketLib.pdb
-C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanketLib\bin\Release\Microsoft.Web.Mvc.dll
-C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanketLib\bin\Release\MvcContrib.dll
-C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanketLib\bin\Release\NVelocity.dll
-C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanketLib\bin\Release\NVelocity.xml
-C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanketLib\obj\Release\ResolveAssemblyReference.cache
-C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanketLib\obj\Release\MvcBlanketLib.dll
-C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanketLib\obj\Release\MvcBlanketLib.pdb

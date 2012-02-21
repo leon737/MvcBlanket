@@ -1,6 +1,0 @@
-C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanket.Security\bin\Debug\MvcBlanket.Security.dll.config
-C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanket.Security\bin\Debug\MvcBlanket.Security.dll
-C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanket.Security\bin\Debug\MvcBlanket.Security.pdb
-C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanket.Security\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanket.Security\obj\Debug\MvcBlanket.Security.dll
-C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanket.Security\obj\Debug\MvcBlanket.Security.pdb
