@@ -1,0 +1,29 @@
+c:\users\gordoll\documents\visual studio 2010\Projects\MvcBlanket\MvcBlanketLibTest\bin\Debug\MvcBlanketLibTest.dll
+c:\users\gordoll\documents\visual studio 2010\Projects\MvcBlanket\MvcBlanketLibTest\bin\Debug\MvcBlanketLibTest.pdb
+c:\users\gordoll\documents\visual studio 2010\Projects\MvcBlanket\MvcBlanketLibTest\bin\Debug\MvcBlanketLib.dll
+c:\users\gordoll\documents\visual studio 2010\Projects\MvcBlanket\MvcBlanketLibTest\bin\Debug\MvcBlanketLib.pdb
+c:\users\gordoll\documents\visual studio 2010\Projects\MvcBlanket\MvcBlanketLibTest\obj\Debug\ResolveAssemblyReference.cache
+c:\users\gordoll\documents\visual studio 2010\Projects\MvcBlanket\MvcBlanketLibTest\obj\Debug\MvcBlanketLibTest.dll
+c:\users\gordoll\documents\visual studio 2010\Projects\MvcBlanket\MvcBlanketLibTest\obj\Debug\MvcBlanketLibTest.pdb
+C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanketLibTest\bin\Debug\MvcBlanketLibTest.dll
+C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanketLibTest\bin\Debug\MvcBlanketLibTest.pdb
+C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanketLibTest\bin\Debug\MvcBlanketLib.dll
+C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanketLibTest\bin\Debug\MvcBlanketLib.pdb
+C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanketLibTest\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanketLibTest\obj\Debug\MvcBlanketLibTest.dll
+C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanketLibTest\obj\Debug\MvcBlanketLibTest.pdb
+C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanketLibTest\bin\Debug\MvcContrib.dll
+C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanketLibTest\bin\Debug\NVelocity.dll
+C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanketLibTest\bin\Debug\Microsoft.Web.Mvc.dll
+C:\Users\leon\Documents\Visual Studio 2010\Projects\MvcBlanket\MvcBlanketLibTest\bin\Debug\NVelocity.xml
+D:\Projects\MvcBlanket\MvcBlanketLibTest\bin\Debug\MvcBlanketLibTest.dll
+D:\Projects\MvcBlanket\MvcBlanketLibTest\bin\Debug\MvcBlanketLibTest.pdb
+D:\Projects\MvcBlanket\MvcBlanketLibTest\bin\Debug\MvcBlanketLib.dll
+D:\Projects\MvcBlanket\MvcBlanketLibTest\bin\Debug\MvcContrib.dll
+D:\Projects\MvcBlanket\MvcBlanketLibTest\bin\Debug\NVelocity.dll
+D:\Projects\MvcBlanket\MvcBlanketLibTest\bin\Debug\Microsoft.Web.Mvc.dll
+D:\Projects\MvcBlanket\MvcBlanketLibTest\bin\Debug\MvcBlanketLib.pdb
+D:\Projects\MvcBlanket\MvcBlanketLibTest\bin\Debug\NVelocity.xml
+D:\Projects\MvcBlanket\MvcBlanketLibTest\obj\Debug\ResolveAssemblyReference.cache
+D:\Projects\MvcBlanket\MvcBlanketLibTest\obj\Debug\MvcBlanketLibTest.dll
+D:\Projects\MvcBlanket\MvcBlanketLibTest\obj\Debug\MvcBlanketLibTest.pdb

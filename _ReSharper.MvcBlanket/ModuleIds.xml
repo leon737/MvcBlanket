@@ -1,6 +1,0 @@
-<Modules>
-  <Module PersistentId="3972656F-3903-4CFB-AD2E-82ABC0F4A04F" ModuleId="MvcBlanketLib" />
-  <Module PersistentId="B72FF7EA-31FB-47DE-BCD0-8B81DFC6472D" ModuleId="MvcBlanketLibTest" />
-  <Module PersistentId="A48C5B66-12B8-4613-888E-23530D26E174" ModuleId="MvcBlanket.Security" />
-  <Module PersistentId="System.Web.ApplicationServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" ModuleId="System.Web.ApplicationServices" />
-</Modules>
