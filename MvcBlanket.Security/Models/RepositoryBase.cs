@@ -1,10 +1,10 @@
-﻿using System.Data.Linq;
+﻿using System.Data.Entity;
 using System;
 
 namespace MvcBlanket.Security.Models
 {
     internal abstract class RepositoryBase<TDataContext>
-        where TDataContext : DataContext, new()
+        where TDataContext : DbContext, new()
     {
 
         readonly Lazy<TDataContext> context = new Lazy<TDataContext>();
@@ -16,7 +16,7 @@ namespace MvcBlanket.Security.Models
 
         protected void Submit()
         {
-            Context.SubmitChanges();
+            Context.SaveChanges();
         }
     }
 }

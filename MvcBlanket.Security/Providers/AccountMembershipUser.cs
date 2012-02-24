@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Security;
-using MvcBlanket.Security.DataAccess.DataContexts;
+using MvcBlanket.Security.DomainModels;
 using MvcBlanket.Security.Helpers;
 using MvcBlanket.Security.Models;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace MvcBlanket.Security.Providers
         public string LastName { get; private set; }
         public byte[] Salt { get; private set; }
 
-        readonly object syncLock = new object();
+        object syncLock = new object();
         User storedEntity;
 
         protected User StoredEntity
@@ -32,7 +32,7 @@ namespace MvcBlanket.Security.Providers
         }
 
         internal AccountMembershipUser(int id, string login, byte[] salt, string firstName, string secondName, string lastName,
-            string email, DateTime regDate, bool isActive)
+             string email, DateTime regDate, bool isActive)
             : base("AccountMembershipProvider",
             login, id, email, null, null, true, !isActive, regDate, DateTime.MinValue, DateTime.MinValue,
             DateTime.MinValue, DateTime.MinValue)
@@ -60,22 +60,31 @@ namespace MvcBlanket.Security.Providers
         internal static AccountMembershipUser GetUser(int id)
         {
             return new SecurityRepository().GetUser(id, u =>
-                new AccountMembershipUser(u.Id, u.Login, u.Salt, u.FirstName, u.SecondName,
-                    u.LastName, u.EMail, u.RegDate, u.IsActive));
+                 new AccountMembershipUser(u.Id, u.Login, u.Salt, u.FirstName, u.SecondName,
+                      u.LastName, u.EMail, u.RegDate, u.IsActive));
         }
 
         internal static AccountMembershipUser GetUser(string login)
         {
             return new SecurityRepository().GetUser(login, u =>
-                new AccountMembershipUser(u.Id, u.Login, u.Salt, u.FirstName, u.SecondName,
-                    u.LastName, u.EMail, u.RegDate, u.IsActive));
+                 new AccountMembershipUser(u.Id, u.Login, u.Salt, u.FirstName, u.SecondName,
+                      u.LastName, u.EMail, u.RegDate, u.IsActive));
         }
+
+        //public override bool ChangePassword(string oldPassword, string newPassword)
+        //{
+        //   return ChangePassword(AccountMembershipProvider.ConvertTostring(oldPassword), AccountMembershipProvider.ConvertTostring(newPassword));
+        //}
 
         public override bool ChangePassword(string oldPassword, string newPassword)
         {
-            if (!ValidatePassword(oldPassword)) return false;
-            SavePassword(newPassword);
-            return true;
+            if (ValidatePassword(oldPassword))
+            {
+                SavePassword(newPassword);
+                return true;
+            }
+            else
+                return false;
         }
 
         public bool ChangePassword(string newPassword)
@@ -95,7 +104,12 @@ namespace MvcBlanket.Security.Providers
             if (passwordFromDb == null || passwordFromDb.Length == 0)
                 return true;
             byte[] validatedPassword = HashPassword(password);
-            return passwordFromDb.SequenceEqual(validatedPassword);
+            if (validatedPassword.Length != passwordFromDb.Length) return false;
+            for (int i = 0; i < validatedPassword.Length; i++)
+            {
+                if (validatedPassword[i] != passwordFromDb[i]) return false;
+            }
+            return true;
         }
 
         new byte[] GetPassword()
@@ -119,14 +133,14 @@ namespace MvcBlanket.Security.Providers
         public override string ResetPassword()
         {
             string newPassword = new PasswordGenerator().Generate();
-            SavePassword(newPassword);
+            SavePassword(AccountMembershipProvider.ConvertTostring(newPassword));
             return newPassword;
         }
 
         public override bool ChangePasswordQuestionAndAnswer(string password, string newPasswordQuestion,
-            string newPasswordAnswer)
+             string newPasswordAnswer)
         {
-            if (!ValidatePassword(password))
+            if (!ValidatePassword(AccountMembershipProvider.ConvertTostring(password)))
                 return false;
 
             var repository = new SecurityRepository();
@@ -249,39 +263,41 @@ namespace MvcBlanket.Security.Providers
             get
             {
                 return GetRoles(StoredEntity,
-                    new List<RoleInformation>(), new List<int>())
-                    .Where(r => r.Access).Select(r => r.RoleName).ToArray();
+                     new List<RoleInformation>(), Enumerable.Empty<int>())
+                     .Where(r => r.Access).Select(r => r.RoleName).ToArray();
             }
         }
 
-        private IEnumerable<User> GetGroups(User user, IList<int> visitedUsers)
-        {
-            return user.ParentUsers.Where(v => !visitedUsers.Contains(v.ParentUserId))
-                .Select(v => v.ParentUser);
-        }
+        //private IEnumerable<User> GetGroups(User user, IEnumerable<int> visitedUsers)
+        //{
+        //   return user.ParentUsers.Where(v => !visitedUsers.Contains(v.ParentUserId))
+        //       .Select(v => v.ParentUser);
+        //}
 
         private IList<RoleInformation> GetRoles(User user, IList<RoleInformation> roles,
-            IList<int> visitedUsers)
+             IEnumerable<int> visitedUsers)
         {
-            var localRoles = user.User2Roles.Select(v => new RoleInformation { RoleName = v.Role.Name, Access = v.Access });
-            foreach (var localRole in localRoles)
-            {
-                var childRole = roles.FirstOrDefault(v => v.RoleName == localRole.RoleName);
-                if (childRole == null)
-                {
-                    roles.Add(localRole);
-                    continue;
-                }
-                if (!childRole.Access)
-                    continue;
-                childRole.Access = localRole.Access;
-            }
-            foreach (var parentUser in GetGroups(user, visitedUsers))
-            {
-                visitedUsers.Add(parentUser.Id);
-                roles = GetRoles(parentUser, roles, visitedUsers);
-            }
-            return roles;
+            return user.Roles.Select(r => new RoleInformation() { Access = true, RoleName = r.Name }).ToList();
+
+            //var localRoles = user.User2Roles.Select(v => new RoleInformation { RoleName = v.Role.Name, Access = v.Access });
+            //foreach (var localRole in localRoles)
+            //{
+            //   var childRole = roles.FirstOrDefault(v => v.RoleName == localRole.RoleName);
+            //   if (childRole == null)
+            //   {
+            //      roles.Add(localRole);
+            //      continue;
+            //   }
+            //   if (!childRole.Access)
+            //      continue;
+            //   childRole.Access = localRole.Access;
+            //}
+            //foreach (var parentUser in GetGroups(user, visitedUsers))
+            //{
+            //   visitedUsers = visitedUsers.Union(new[] { parentUser.Id });
+            //   roles = GetRoles(parentUser, roles, visitedUsers);
+            //}
+            //return roles;
         }
 
         public void UpdateLastActivity()
