@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Web;
 using System.Web.Mvc;
 using MvcBlanketLib.Extensions;
 using MvcBlanketLib.PageFilters;
@@ -16,7 +17,13 @@ namespace MvcBlanketLib.ViewModels
         private const int DefaultPageNumber = 1;
         private const int DefaultPageSize = 10;
 
-        public ViewDataDictionary ViewData { get; set; }
+        private ViewDataDictionary viewData;
+        public ViewDataDictionary ViewData
+        {
+            get { return viewData ?? ControllerContext.Controller.ViewData; }
+            set { viewData = value; }
+        }
+        public ControllerContext ControllerContext { get; set; }
         public IQueryable<T> Query { get; set; }
         public GridSortOptions GridSortOptions { get; set; }
         public string DefaultSortColumn { get; set; }
@@ -59,9 +66,15 @@ namespace MvcBlanketLib.ViewModels
             return this;
         }
 
-         public PagedViewModel<T> Apply(Func<IPageFiltersModel, IQueryable<T>> selector)
-         {
-             Query = selector(ViewData["Filters"] as IPageFiltersModel);
+        public PagedViewModel<T> Apply(Func<IPageFiltersModel, IQueryable<T>> selector)
+        {
+            Query = selector(ViewData["Filters"] as IPageFiltersModel);
+            return this;
+        }
+
+        public PagedViewModel<T> Apply<TS>(Func<TS, IQueryable<T>> selector)
+        {
+            Query = selector((TS)(ViewData["Filters"]));
             return this;
         }
 
@@ -86,7 +99,7 @@ namespace MvcBlanketLib.ViewModels
             return this;
         }
 
-        public PagedViewModel<T> SetupEx(params Expression<Func<T, object>>[] orderLambdas)
+        public PagedViewModel<T> SetupByExpressions(params Expression<Func<T, object>>[] orderLambdas)
         {
             if (orderLambdas == null || !orderLambdas.Any()) return this;
             var first = orderLambdas.First();
@@ -96,16 +109,56 @@ namespace MvcBlanketLib.ViewModels
             return this;
         }
 
-        public PagedViewModel<T> SetupEx(params string[] columnNames)
+        public PagedViewModel<T> SetupByNames(params string[] columnNames)
         {
-            if (columnNames == null || !columnNames.Any()) return this;
+
+            if (string.IsNullOrWhiteSpace(GridSortOptions.Column))
+            {
+                GridSortOptions.Column = DefaultSortColumn;
+                GridSortOptions.Direction = DefaultSortDirection;
+            }
+
+            if (columnNames == null || !columnNames.Any())
+            {
+                columnNames = new[] {GridSortOptions.Column};
+            }
+            IEnumerable<SortMapping> mappings = ControllerContext != null ? GetSortMapping() : null;
+            
+            IQueryable<T> query;
             var first = columnNames.First();
-            var query = Query.OrderBy(first, GridSortOptions.Direction, true);
-            query = columnNames.Skip(1).Aggregate(query, (current, next) => current.OrderBy(next, GridSortOptions.Direction, false));
+            if (mappings != null)
+            {
+                var cn = SortMapping.GetColumnNames(mappings, first).ToList();
+                query = Query.OrderBy(cn.First(), GridSortOptions.Direction, true);
+                foreach(var c in cn.Skip(1))
+                    query = query.OrderBy(c, GridSortOptions.Direction, false);
+            }
+            else
+            {
+                query = Query.OrderBy(first, GridSortOptions.Direction, true);
+            }
+
+            query = columnNames.Skip(1).Aggregate(query, (current, next) =>
+                                                         {
+                                                             if (mappings != null)
+                                                             {
+                                                                 var cn = SortMapping.GetColumnNames(mappings, next);
+                                                                 current = cn.Aggregate(current, (current1, c) => current1.OrderBy(c, GridSortOptions.Direction, false));
+                                                             }
+                                                             else
+                                                                 current = current.OrderBy(next, GridSortOptions.Direction, false);
+                                                             return current;
+                                                         });
             PagedList = query.AsPagination(Page ?? DefaultPageNumber, PageSize ?? DefaultPageSize);
             return this;
         }
-        
+
+        private IEnumerable<SortMapping> GetSortMapping()
+        {
+            var mapping = ControllerContext.HttpContext.Items[SortMapping.ContentItemName] as IEnumerable<SortMapping>;
+            return mapping;
+        }
+
         public PagedViewModel<T> Skip(IPagination<T> data)
         {
             PagedList = data;
@@ -122,6 +175,21 @@ namespace MvcBlanketLib.ViewModels
 
             Query = Query.Where(predicate);
         }
+
     }
 
+    internal class SortMapping
+    {
+        public const string ContentItemName = "__sortmapping";
+
+        public string CommonName { get; set; }
+        public IEnumerable<string> ColumnNames { get; set; }
+
+        public static IEnumerable<string> GetColumnNames(IEnumerable<SortMapping> mappings, string commonName)
+        {
+            var bestFit = mappings.FirstOrDefault(m => m.CommonName == commonName);
+            if (bestFit != null) return bestFit.ColumnNames;
+            return new[] {commonName};
+        }
+    }
 }

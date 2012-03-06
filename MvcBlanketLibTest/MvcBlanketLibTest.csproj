@@ -51,6 +51,7 @@
     <Compile Include="MaybeMonadTest.cs" />
     <Compile Include="PagedViewModelTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SortExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MvcBlanketLib\MvcBlanketLib.csproj">

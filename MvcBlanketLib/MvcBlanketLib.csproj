@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="ActionFilters\NavigatedAttribute.cs" />
     <Compile Include="ActionFilters\SelectFilterAttribute.cs" />
+    <Compile Include="ActionFilters\SortMappingAttribute.cs" />
     <Compile Include="BackgroundTasks\BackgroundTask.cs" />
     <Compile Include="BackgroundTasks\BackgroundTasksManager.cs" />
     <Compile Include="BackgroundTasks\BackgroundTasksManagerSettings.cs" />
@@ -95,6 +96,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

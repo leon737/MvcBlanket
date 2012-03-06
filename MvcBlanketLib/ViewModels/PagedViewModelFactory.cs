@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using MvcContrib.UI.Grid;
 using MvcContrib.Sorting;
 
@@ -21,6 +17,19 @@ namespace MvcBlanketLib.ViewModels
                        Page = (int) viewData["PageNumber"],
                        PageSize = (int) viewData["PageSize"]
                    };
+        }
+
+        public static PagedViewModel<T> Create<T>(ControllerContext context, string defaultSortColumn = "", SortDirection defaultSortDirection = SortDirection.Ascending)
+        {
+            return new PagedViewModel<T>
+            {
+                ControllerContext = context,
+                GridSortOptions = context.Controller.ViewBag.GridSortOptions,
+                DefaultSortColumn = defaultSortColumn,
+                DefaultSortDirection = defaultSortDirection,
+                Page = context.Controller.ViewBag.PageNumber,
+                PageSize = context.Controller.ViewBag.PageSize
+            };
         }
     }
 }

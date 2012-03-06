@@ -51,7 +51,7 @@ namespace MvcBlanketLibTest
         {
             var query = MockRepositoryMethod();
             var model = new PagedViewModel<MockEntity> { Query = MockRepositoryMethod(), GridSortOptions = new GridSortOptions { Direction = SortDirection.Ascending } }
-                .SetupEx(m => m.IntProp, m => m.StringProp);
+                .SetupByExpressions(m => m.IntProp, m => m.StringProp);
             Assert.IsTrue(model.PagedList.Count() == query.Count());
             Assert.AreEqual(query.First().IntProp, model.PagedList.Skip(1).First().IntProp);
         }
@@ -61,7 +61,7 @@ namespace MvcBlanketLibTest
         {
             var query = MockRepositoryMethod();
             var model = new PagedViewModel<MockEntity> { Query = MockRepositoryMethod(), GridSortOptions = new GridSortOptions { Direction = SortDirection.Ascending } }
-                .SetupEx("IntProp", "StringProp");
+                .SetupByNames("IntProp", "StringProp");
             Assert.IsTrue(model.PagedList.Count() == query.Count());
             Assert.AreEqual(query.First().IntProp, model.PagedList.Skip(1).First().IntProp);
         }

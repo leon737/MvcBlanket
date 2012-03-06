@@ -8,3 +8,4 @@ _ReSharper.*
 *.DotSettings.user
 *.suo
 *.cache
+TestResults/
