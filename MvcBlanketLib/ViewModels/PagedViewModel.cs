@@ -12,6 +12,9 @@ namespace MvcBlanketLib.ViewModels
 {
     public class PagedViewModel<T>
     {
+        private const int DefaultPageNumber = 1;
+        private const int DefaultPageSize = 10;
+
         public ViewDataDictionary ViewData { get; set; }
         public IQueryable<T> Query { get; set; }
         public GridSortOptions GridSortOptions { get; set; }
@@ -52,19 +55,28 @@ namespace MvcBlanketLib.ViewModels
             }
 
             PagedList = Query.OrderBy(GridSortOptions.Column, GridSortOptions.Direction)
-                 .AsPagination(Page ?? 1, PageSize ?? 10);
+                 .AsPagination(Page ?? DefaultPageNumber, PageSize ?? DefaultPageSize);
             return this;
         }
 
-        public PagedViewModel<T> Setup<K>(Func<T, K> order)
+        public PagedViewModel<T> Setup<TK>(Func<T, TK> order)
         {
-            if (GridSortOptions.Direction == SortDirection.Ascending)
-                PagedList = Query.OrderBy(order).AsPagination(Page ?? 1, PageSize ?? 10);
-            else
-                PagedList = Query.OrderByDescending(order).AsPagination(Page ?? 1, PageSize ?? 10);
+            PagedList = GridSortOptions.Direction == SortDirection.Ascending 
+                ? Query.OrderBy(order).AsPagination(Page ?? DefaultPageNumber, PageSize ?? DefaultPageSize) 
+                : Query.OrderByDescending(order).AsPagination(Page ?? DefaultPageNumber, PageSize ?? DefaultPageSize);
             return this;
         }
 
+        public PagedViewModel<T> Setup<TK>(params Expression<Func<T, TK>>[] orderLambdas)
+        {
+            if (orderLambdas == null || !orderLambdas.Any()) return this;
+            var first = orderLambdas.First();
+            var query = GridSortOptions.Direction == SortDirection.Ascending ? Query.OrderBy(first) : Query.OrderByDescending(first);
+            query = orderLambdas.Skip(1).Aggregate(query, (current, next) => GridSortOptions.Direction == SortDirection.Ascending ? current.ThenBy(next) : current.ThenByDescending(next));
+            PagedList = query.AsPagination(Page ?? DefaultPageNumber, PageSize ?? DefaultPageSize);
+            return this;
+        }
+        
         public PagedViewModel<T> Skip(IPagination<T> data)
         {
             PagedList = data;
