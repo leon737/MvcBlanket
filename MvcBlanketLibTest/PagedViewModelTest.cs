@@ -2,6 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcBlanketLib.ViewModels;
 using MvcContrib.Sorting;
@@ -63,6 +64,18 @@ namespace MvcBlanketLibTest
                 .SetupEx("IntProp", "StringProp");
             Assert.IsTrue(model.PagedList.Count() == query.Count());
             Assert.AreEqual(query.First().IntProp, model.PagedList.Skip(1).First().IntProp);
+        }
+
+        [TestMethod]
+        public void ConstructPageViewModelWithApplyMethodResult ()
+        {
+            var query = MockRepositoryMethod();
+            var viewData = new ViewDataDictionary();
+            viewData["GridSortOptions"] = new GridSortOptions();
+            viewData["PageNumber"] = 1;
+            viewData["PageSize"] = 10;
+            var model = PagedViewModelFactory.Create<MockEntity>(viewData).Apply(query).Setup();
+            Assert.AreEqual(query.Count(), model.PagedList.Count());
         }
     }
 }

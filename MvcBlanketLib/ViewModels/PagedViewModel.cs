@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
 using MvcBlanketLib.Extensions;
+using MvcBlanketLib.PageFilters;
 using MvcContrib.Pagination;
 using MvcContrib.UI.Grid;
 using MvcContrib.Sorting;
@@ -43,6 +44,24 @@ namespace MvcBlanketLib.ViewModels
             ProcessQuery(value, predicate);
             var selectList = query.ToSelectList(keyField, textField, value);
             ViewData[keyField] = selectList;
+            return this;
+        }
+
+        public PagedViewModel<T> Apply(IQueryable<T> data)
+        {
+            Query = data;
+            return this;
+        }
+
+        public PagedViewModel<T> Apply(Func<Dictionary<string, string>, IQueryable<T>> selector)
+        {
+            Query = selector(ViewData["Filters"] as Dictionary<string, string>);
+            return this;
+        }
+
+         public PagedViewModel<T> Apply(Func<IPageFiltersModel, IQueryable<T>> selector)
+         {
+             Query = selector(ViewData["Filters"] as IPageFiltersModel);
             return this;
         }
 

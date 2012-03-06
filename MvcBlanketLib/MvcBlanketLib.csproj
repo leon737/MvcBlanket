@@ -90,6 +90,7 @@
     <Compile Include="ResumingActionResult\ResumingFileStreamResult.cs" />
     <Compile Include="ResumingActionResult\ResumingRequest.cs" />
     <Compile Include="ViewModels\PagedViewModel.cs" />
+    <Compile Include="ViewModels\PagedViewModelFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
