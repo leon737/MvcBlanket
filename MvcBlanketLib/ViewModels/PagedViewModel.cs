@@ -1,5 +1,5 @@
-﻿
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
@@ -61,18 +61,28 @@ namespace MvcBlanketLib.ViewModels
 
         public PagedViewModel<T> Setup<TK>(Func<T, TK> order)
         {
-            PagedList = GridSortOptions.Direction == SortDirection.Ascending 
-                ? Query.OrderBy(order).AsPagination(Page ?? DefaultPageNumber, PageSize ?? DefaultPageSize) 
+            PagedList = GridSortOptions.Direction == SortDirection.Ascending
+                ? Query.OrderBy(order).AsPagination(Page ?? DefaultPageNumber, PageSize ?? DefaultPageSize)
                 : Query.OrderByDescending(order).AsPagination(Page ?? DefaultPageNumber, PageSize ?? DefaultPageSize);
             return this;
         }
 
-        public PagedViewModel<T> Setup<TK>(params Expression<Func<T, TK>>[] orderLambdas)
+        public PagedViewModel<T> SetupEx(params Expression<Func<T, object>>[] orderLambdas)
         {
             if (orderLambdas == null || !orderLambdas.Any()) return this;
             var first = orderLambdas.First();
             var query = GridSortOptions.Direction == SortDirection.Ascending ? Query.OrderBy(first) : Query.OrderByDescending(first);
             query = orderLambdas.Skip(1).Aggregate(query, (current, next) => GridSortOptions.Direction == SortDirection.Ascending ? current.ThenBy(next) : current.ThenByDescending(next));
+            PagedList = query.AsPagination(Page ?? DefaultPageNumber, PageSize ?? DefaultPageSize);
+            return this;
+        }
+
+        public PagedViewModel<T> SetupEx(params string[] columnNames)
+        {
+            if (columnNames == null || !columnNames.Any()) return this;
+            var first = columnNames.First();
+            var query = Query.OrderBy(first, GridSortOptions.Direction, true);
+            query = columnNames.Skip(1).Aggregate(query, (current, next) => current.OrderBy(next, GridSortOptions.Direction, false));
             PagedList = query.AsPagination(Page ?? DefaultPageNumber, PageSize ?? DefaultPageSize);
             return this;
         }
