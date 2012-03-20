@@ -62,19 +62,19 @@ namespace MvcBlanketLib.ViewModels
 
         public PagedViewModel<T> Apply(Func<Dictionary<string, string>, IQueryable<T>> selector)
         {
-            Query = selector(ViewData["Filters"] as Dictionary<string, string>);
+            Query = selector(ViewData["FiltersModel"] as Dictionary<string, string>);
             return this;
         }
 
         public PagedViewModel<T> Apply(Func<IPageFiltersModel, IQueryable<T>> selector)
         {
-            Query = selector(ViewData["Filters"] as IPageFiltersModel);
+            Query = selector(ViewData["FiltersModel"] as IPageFiltersModel);
             return this;
         }
 
         public PagedViewModel<T> Apply<TS>(Func<TS, IQueryable<T>> selector)
         {
-            Query = selector((TS)(ViewData["Filters"]));
+            Query = selector((TS)(ViewData["FiltersModel"]));
             return this;
         }
 
