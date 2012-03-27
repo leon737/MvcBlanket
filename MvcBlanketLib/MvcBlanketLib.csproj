@@ -78,6 +78,7 @@
     <Compile Include="Helpers\MailSender.cs" />
     <Compile Include="Helpers\NVelocityTemplateRepository.cs" />
     <Compile Include="Helpers\ParameterRebinder.cs" />
+    <Compile Include="Helpers\ViewPageHelpers.cs" />
     <Compile Include="Mail\IMailStorage.cs" />
     <Compile Include="Mail\Mail.cs" />
     <Compile Include="Mail\MailService.cs" />
