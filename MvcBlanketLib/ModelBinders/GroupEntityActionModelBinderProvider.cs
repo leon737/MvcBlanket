@@ -13,21 +13,24 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
+using System.Web.Mvc;
 
-namespace Mvc.ResumingActionResults
+namespace MvcBlanketLib.ModelBinders
 {
-    public class ResumingFileContentResult : ResumingActionResultBase
+    public class GroupEntityActionModelBinderProvider : IModelBinderProvider
     {
-        public ResumingFileContentResult(byte[] fileContents, string contentType)
-            : base(contentType)
+        public IModelBinder GetBinder(Type modelType)
         {
-            if (fileContents == null)
-                throw new ArgumentNullException("fileContents");
+            if (!typeof(IGroupAction).IsAssignableFrom(modelType))
+                return null;
+            var genericType = modelType.GetGenericArguments().First();
+            var modelBinderType = typeof(GroupEntityActionModelBinder<>).MakeGenericType(genericType);
+            var modelBinder = Activator.CreateInstance(modelBinderType);
+            return (IModelBinder)modelBinder;
 
-            FileContents = new MemoryStream(fileContents);
         }
     }
+
 }
