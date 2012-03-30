@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("MvcBlanket")]
-[assembly: AssemblyCopyright("Copyright © Leonid Gordo 2011 - 2012")]
+[assembly: AssemblyCopyright("Copyright © Leonid Gordo 2009 - 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
