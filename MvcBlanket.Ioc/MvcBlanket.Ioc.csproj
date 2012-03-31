@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Factories\WindsorControllerFactory.cs" />
     <Compile Include="Installers\ControllerInstaller.cs" />
+    <Compile Include="Installers\IocInstaller.cs" />
     <Compile Include="Installers\RepositoryInstaller.cs" />
     <Compile Include="ModelBinders\IocViewModelBinder.cs" />
     <Compile Include="ModelBinders\IocViewModelBinderProvider.cs" />
