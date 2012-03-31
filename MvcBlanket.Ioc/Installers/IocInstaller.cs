@@ -63,7 +63,7 @@ namespace MvcBlanket.Ioc.Installers
 
         private void RegisterResolvers() 
         {
-            ViewModelsResolver.Create(container.Kernel);
+            ViewModelsResolver.Create(container.Kernel, typeof(T));
         }
 
 

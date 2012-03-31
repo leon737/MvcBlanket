@@ -13,6 +13,7 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
+using System;
 
 namespace MvcBlanket.Ioc.Resolvers
 {
@@ -26,21 +27,21 @@ namespace MvcBlanket.Ioc.Resolvers
             this.kernel = kernel;
         }
 
-        public static ViewModelsResolver Create(IKernel kernel)
+        public static ViewModelsResolver Create(IKernel kernel, Type t)
         {
             resolver = new ViewModelsResolver(kernel);
-            resolver.InstallViewModels();
+            resolver.InstallViewModels(t);
             return resolver;
         }
 
-        private void InstallViewModels()
+        private void InstallViewModels(Type t)
         {
-            kernel.Register(FindViewModels().Configure(c => c.LifestylePerWebRequest()));
+            kernel.Register(FindViewModels(t).Configure(c => c.LifestylePerWebRequest()));
         }
 
-        private BasedOnDescriptor FindViewModels()
+        private BasedOnDescriptor FindViewModels(Type t)
         {
-            return AllTypes.FromThisAssembly().BasedOn<IIocViewModel>();
+            return AllTypes.FromAssemblyContaining(t).BasedOn<IIocViewModel>();
         }
 
         public static ViewModelsResolver Instance

@@ -28,7 +28,7 @@ namespace MvcBlanket.Ioc.Installers
 
         private BasedOnDescriptor FindControllers()
         {
-            return AllTypes.FromThisAssembly()
+            return AllTypes.FromAssemblyContaining(typeof(T))
                 .BasedOn<IController>()
                 .If(Component.IsInSameNamespaceAs<T>())
                 .If(t => t.Name.EndsWith("Controller"));
