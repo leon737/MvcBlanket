@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{FF4AF5
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcBlanket.Ioc", "MvcBlanket.Ioc\MvcBlanket.Ioc.csproj", "{5D5A1775-AE5D-41F7-A4A9-AEDC944A9C94}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = MvcBlanket.vsmdi
@@ -41,6 +43,10 @@ Global
 		{A48C5B66-12B8-4613-888E-23530D26E174}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A48C5B66-12B8-4613-888E-23530D26E174}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A48C5B66-12B8-4613-888E-23530D26E174}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D5A1775-AE5D-41F7-A4A9-AEDC944A9C94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D5A1775-AE5D-41F7-A4A9-AEDC944A9C94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D5A1775-AE5D-41F7-A4A9-AEDC944A9C94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D5A1775-AE5D-41F7-A4A9-AEDC944A9C94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
