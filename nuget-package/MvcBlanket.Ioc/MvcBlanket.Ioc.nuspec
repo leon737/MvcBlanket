@@ -9,6 +9,7 @@
     <description>MvcBlanket integration to Castle Windsor</description>
     <copyright>Copyright 2009 - 2012 Leonid Gordo</copyright>  
 	<licenseUrl>http://www.gnu.org/copyleft/lesser.html</licenseUrl>
+	<projectUrl>https://github.com/leon737/MvcBlanket</projectUrl>
 	<tags>MVC inversionOfControl DependencyInjection</tags>
 	<dependencies>
       <dependency id="MvcBlanketLib" version="0.3.0" />
