@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>MvcBlanketLib</id>
+    <version>0.3.0.0</version>
+    <authors>Leonid Gordo</authors>
+    <owners>Leonid Gordo</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Small but powerfull library for ASP.NET MVC Web Application development.</description>
+    <copyright>Copyright 2009 - 2012 Leonid Gordo</copyright>  
+	<licenseUrl>http://www.gnu.org/copyleft/lesser.html</licenseUrl>
+	<projectUrl>https://github.com/leon737/MvcBlanket</projectUrl>
+	<tags>MVC</tags>
+	<dependencies>
+      <dependency id="NVelocity" version="1.0.3" />
+	  <dependency id="MvcContrib.Mvc3-ci" version="3.0.100.0" />
+    </dependencies>
+  </metadata>   
+</package>
