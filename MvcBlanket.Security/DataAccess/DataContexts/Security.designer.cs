@@ -263,7 +263,7 @@ namespace MvcBlanket.Security.DataAccess.DataContexts
 		
 		private int _RoleId;
 		
-		private bool _Access;
+		private System.Nullable<bool> _Access;
 		
 		private EntityRef<Role> _Role;
 		
@@ -279,7 +279,7 @@ namespace MvcBlanket.Security.DataAccess.DataContexts
     partial void OnUserIdChanged();
     partial void OnRoleIdChanging(int value);
     partial void OnRoleIdChanged();
-    partial void OnAccessChanging(bool value);
+    partial void OnAccessChanging(System.Nullable<bool> value);
     partial void OnAccessChanged();
     #endregion
 		
@@ -358,8 +358,8 @@ namespace MvcBlanket.Security.DataAccess.DataContexts
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Access", DbType="bit NOT NULL")]
-		public bool Access
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Access", DbType="bit")]
+		public System.Nullable<bool> Access
 		{
 			get
 			{

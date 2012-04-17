@@ -16,7 +16,7 @@ namespace MvcBlanket.Security.Models
     class RoleInformation
     {
         public string RoleName { get; set; }
-        public bool Access { get; set; }
+        public bool? Access { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -33,7 +33,7 @@ namespace MvcBlanket.Security.Models
         public override string ToString()
         {
             return string.Format("{0} : {1}", RoleName,
-                Access ? "Granted" : "Denied");
+                Access.GetValueOrDefault(true) ? "Granted" : "Denied");
         }
     }
 }
