@@ -263,7 +263,7 @@ namespace MvcBlanket.Security.Providers
             {
                 return GetRoles(StoredEntity,
                     new List<RoleInformation>(), new List<int>())
-                    .Where(r => r.Access).Select(r => r.RoleName).ToArray();
+                    .Where(r => r.Access.GetValueOrDefault(true)).Select(r => r.RoleName).ToArray();
             }
         }
 
@@ -285,7 +285,7 @@ namespace MvcBlanket.Security.Providers
                     roles.Add(localRole);
                     continue;
                 }
-                if (!childRole.Access)
+                if (!childRole.Access.GetValueOrDefault(true))
                     continue;
                 childRole.Access = localRole.Access;
             }

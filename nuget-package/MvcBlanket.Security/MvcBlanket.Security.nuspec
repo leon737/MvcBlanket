@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>MvcBlanket.Security</id>
-    <version>0.3.0.0</version>
+    <version>0.3.3.0</version>
     <authors>Leonid Gordo</authors>
     <owners>Leonid Gordo</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
