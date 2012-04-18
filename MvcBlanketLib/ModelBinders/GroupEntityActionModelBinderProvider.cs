@@ -12,9 +12,7 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 */
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Web.Mvc;
 
 namespace MvcBlanketLib.ModelBinders
@@ -25,8 +23,18 @@ namespace MvcBlanketLib.ModelBinders
         {
             if (!typeof(IGroupAction).IsAssignableFrom(modelType))
                 return null;
-            var genericType = modelType.GetGenericArguments().First();
-            var modelBinderType = typeof(GroupEntityActionModelBinder<>).MakeGenericType(genericType);
+            var genericType = modelType.GetGenericArguments();
+            switch (genericType.Length)
+            {
+                case 1:
+                    genericType = new[] {typeof (string), genericType.First()};
+                    break;
+                case 2:
+                    break;
+                default:
+                    throw new ArgumentException("Incorrect number of generic arguments given in descendant class of IGroupAction");
+            }
+            var modelBinderType = typeof(GroupEntityActionModelBinder<,>).MakeGenericType(genericType);
             var modelBinder = Activator.CreateInstance(modelBinderType);
             return (IModelBinder)modelBinder;
 

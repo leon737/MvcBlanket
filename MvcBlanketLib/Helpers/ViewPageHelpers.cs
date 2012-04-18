@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
+using MvcBlanketLib.ModelBinders;
 
 namespace MvcBlanketLib.Helpers
 {
@@ -113,6 +114,11 @@ namespace MvcBlanketLib.Helpers
             string renderConfirm = !string.IsNullOrWhiteSpace(confirmText) ? string.Format(confirmTemplate, confirmText) : "";
             string result = string.Format(template, name, text, renderIfNothingSelected, renderConfirm);
             return new MvcHtmlString(result);
+        }
+
+        public static string GetActionEnumString<TPage, TEnum>(this WebViewPage<TPage> page, TEnum enumValue)
+        {
+            return new ActionEnumConverter<TEnum>(enumValue);
         }
     }
 }
