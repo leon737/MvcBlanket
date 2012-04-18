@@ -82,6 +82,8 @@
     <Compile Include="Mail\IMailStorage.cs" />
     <Compile Include="Mail\Mail.cs" />
     <Compile Include="Mail\MailService.cs" />
+    <Compile Include="ModelBinders\FlagBase.cs" />
+    <Compile Include="ModelBinders\FlagStringAttribute.cs" />
     <Compile Include="ModelBinders\GroupEntityActionModelBinder.cs" />
     <Compile Include="ModelBinders\GroupEntityActionModelBinderProvider.cs" />
     <Compile Include="PageFilters\IPageFiltersModel.cs" />

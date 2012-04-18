@@ -26,8 +26,28 @@ namespace MvcBlanketLib.ModelBinders
             var action = formData["action"];
             var ids = formData["chk"].Split(',').Where(s => !string.IsNullOrWhiteSpace(s));
             if (typeof(TAction) != typeof(string))
-                return new GroupAction<TAction, TValues> { Action = (TAction) Convert.ChangeType(action, typeof (TAction)), Identifiers = ids.Select(i => (TValues)Convert.ChangeType(i, typeof(TValues))) };
+                return new GroupAction<TAction, TValues> { Action = ConvertAction(action), Identifiers = ids.Select(i => (TValues)Convert.ChangeType(i, typeof(TValues))) };
             return new GroupAction<TValues> { Action = action, Identifiers = ids.Select(i => (TValues)Convert.ChangeType(i, typeof(TValues))) };
+        }
+
+        private static TAction ConvertAction(string action)
+        {
+            return typeof(TAction).IsEnum ? ((ActionEnumConverter<TAction>)action).Value : (TAction)Convert.ChangeType(action, typeof(TAction));
+        }
+    }
+
+    internal class ActionEnumConverter<T> : FlagBase<ActionEnumConverter<T>, T>
+    {
+        public ActionEnumConverter() { }
+
+        public ActionEnumConverter(T enumValue)
+        {
+            Flag = enumValue;
+        }
+
+        public T Value
+        {
+            get { return Flag; }
         }
     }
 
