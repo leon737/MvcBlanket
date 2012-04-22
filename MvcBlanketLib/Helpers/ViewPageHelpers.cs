@@ -59,20 +59,22 @@ namespace MvcBlanketLib.Helpers
             return new MvcHtmlString(template);
         }
 
-        public static MvcHtmlString FilterTextBox(this HtmlHelper htmlHelper, string name, string @class = "")
+        public static MvcHtmlString FilterTextBox(this HtmlHelper htmlHelper, string name, string label = "", string @class = "")
         {
+            var span = RenderFilterItemSpan(label);
             string renderClass = !string.IsNullOrWhiteSpace(@class) ? "class=\"" + @class + "\"" : "";
             string template = "<input type=\"text\" name=\"s_{0}\" value=\"{1}\" {2}/>";
-            string result = string.Format(template, name, GetFilter(htmlHelper.ViewData, name), renderClass);
+            string result = span + string.Format(template, name, GetFilter(htmlHelper.ViewData, name), renderClass, label);
             return new MvcHtmlString(result);
         }
 
         public static MvcHtmlString FilterDropDownList<T>(this HtmlHelper htmlHelper, string name, string unsetValue, string unsetText,
-            IEnumerable<T> values, Func<T, string> valueSelector, Func<T, string> labelSelector, string @class = "")
+            IEnumerable<T> values, Func<T, string> valueSelector, Func<T, string> labelSelector, string label = "", string @class = "")
         {
+            var span = RenderFilterItemSpan(label);
             StringBuilder sb = new StringBuilder();
             string selectTemplate = "<select name=\"s_{0}\">";
-            sb.AppendFormat(selectTemplate, name);
+            sb.AppendFormat(selectTemplate, name, label);
             string unsetOptionTemplate = "<option value=\"{0}\">{1}</option>";
             sb.AppendFormat(unsetOptionTemplate, unsetValue, unsetText);
             string optionTemplate = "<option value=\"{0}\" {1}>{2}</option>";
@@ -82,13 +84,19 @@ namespace MvcBlanketLib.Helpers
                 sb.AppendFormat(optionTemplate, valueSelector(v), selectedAttr, labelSelector(v));
             }
             sb.Append("</select>");
-            return new MvcHtmlString(sb.ToString());
+            return new MvcHtmlString(span + sb.ToString());
         }
 
         public static MvcHtmlString BeginFilterForm(this HtmlHelper htmlHelper)
         {
             string template = "<form id=\"sform\" method=\"get\">";
             return new MvcHtmlString(template);
+        }
+
+        static string RenderFilterItemSpan(string label) 
+        {
+            if (string.IsNullOrWhiteSpace(label)) return string.Empty;
+            return string.Format("<span>{0}</span>", label);
         }
 
         public static MvcHtmlString FilterFormButtons(this HtmlHelper htmlHelper, string applyText, string resetText)
