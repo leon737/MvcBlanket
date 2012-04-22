@@ -21,7 +21,7 @@ namespace MvcBlanketLib.PageFilters
     {
         public static IQueryable<TSource> Where<TSource, TFilterType>(this IQueryable<TSource> query, PageFilter<TFilterType> filter, Expression<Func<TSource, bool>> predicate)
         {
-            return (filter.Selected && !filter.Value.Equals(filter.NotSelectedValue)) ? query.Where(predicate) : query; 
+            return (filter.Selected && !filter.RawValue.Equals(filter.NotSelectedValue)) ? query.Where(predicate) : query; 
         }
     }
 }

@@ -47,17 +47,18 @@ namespace MvcBlanketLib.ActionFilters
 
                 var pageFilterType = typeof(PageFilter<>).MakeGenericType(new[] { targetType });
                 object targetValue = targetType == typeof(string) ? null : FormatterServices.GetUninitializedObject(targetType);
-                object notSelectedValue = targetType == typeof(string) ? null : FormatterServices.GetUninitializedObject(targetType);
+                string stringValue = string.Empty;
+                string notSelectedValue = string.Empty;
                 Exception exception = null;
 
                 if (!filters.ContainsKey(propertyName) || string.IsNullOrWhiteSpace(filters[propertyName]))
                 {
-                    object pageFilter1 = Activator.CreateInstance(pageFilterType, new[] { targetValue, false, exception, notSelectedValue });
+                    object pageFilter1 = Activator.CreateInstance(pageFilterType, new[] { targetValue, false, exception, stringValue, notSelectedValue });
                     property.SetValue(model, pageFilter1, null);
                     continue;
                 }
 
-                string stringValue = filters[propertyName];
+                stringValue = filters[propertyName];
 
                 try
                 {
@@ -74,21 +75,10 @@ namespace MvcBlanketLib.ActionFilters
                     var notSelectedValueAttribute =
                         property.GetCustomAttributes(typeof(PageFilterNotSelectedValueAttribute), false).FirstOrDefault() as PageFilterNotSelectedValueAttribute;
                     if (notSelectedValueAttribute != null)
-                    {
-                        string stringNotSelectedValue = notSelectedValueAttribute.NotSelectedValue;
-                        try
-                        {
-                            notSelectedValue = Convert.ChangeType(stringNotSelectedValue, targetType);
-
-                        }
-                        catch (Exception ex)
-                        {
-                            exception = ex;
-                        }
-                    }
+                        notSelectedValue = notSelectedValueAttribute.NotSelectedValue;                        
                 }
 
-                object pageFilter = Activator.CreateInstance(pageFilterType, new[] { targetValue, exception == null, exception, notSelectedValue });
+                object pageFilter = Activator.CreateInstance(pageFilterType, new[] { targetValue, exception == null, exception, stringValue, notSelectedValue });
                 property.SetValue(model, pageFilter, null);
             }
             return model;
