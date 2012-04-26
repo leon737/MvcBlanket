@@ -87,7 +87,8 @@ namespace MvcBlanketLib.Helpers
             return new MvcHtmlString(result);
         }
 
-        public static MvcHtmlString FilterTextBox<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, PageFilter<TProperty>>> expression, string label = "", string @class = "")
+        public static MvcHtmlString FilterTextBox<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, 
+            Expression<Func<TModel, PageFilter<TProperty>>> expression, string label = "", string @class = "")
             where TModel : IPageFiltersModel
         {
             var span = RenderFilterItemSpan(label);
@@ -115,7 +116,7 @@ namespace MvcBlanketLib.Helpers
             var aliasAttribute = memberInfo.GetCustomAttributes(typeof (AliasAttribute), false).FirstOrDefault() as AliasAttribute;
             if (aliasAttribute != null)
                 return aliasAttribute.Name;
-            return propName;
+            return propName.ToLowerInvariant();
         }
 
         private static CultureInfo GetPageFilterPropCultureInfo(MemberInfo memberInfo)
@@ -139,6 +140,34 @@ namespace MvcBlanketLib.Helpers
             foreach (var v in values)
             {
                 string selectedAttr = GetFilter(htmlHelper.ViewData, name) == valueSelector(v) ? "selected=\"selected\"" : "";
+                sb.AppendFormat(optionTemplate, valueSelector(v), selectedAttr, labelSelector(v));
+            }
+            sb.Append("</select>");
+            return new MvcHtmlString(span + sb);
+        }
+
+        public static MvcHtmlString FilterDropDownList<T, TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, 
+            Expression<Func<TModel, PageFilter<TProperty>>> expression, string unsetValue, string unsetText,
+            IEnumerable<T> values, Func<T, string> valueSelector, Func<T, string> labelSelector, string label = "", string @class = "")
+             where TModel : IPageFiltersModel
+        {
+            var span = RenderFilterItemSpan(label);
+            string propName = ExpressionHelper.GetExpressionText(expression);
+            MemberInfo mi = GetPageFilterPropertyType(expression);
+            string name = GetPageFilterPropName(mi, propName);
+
+            var sb = new StringBuilder();
+            const string selectTemplate = "<select name=\"s_{0}\">";
+            sb.AppendFormat(selectTemplate, name);
+            const string unsetOptionTemplate = "<option value=\"{0}\">{1}</option>";
+            sb.AppendFormat(unsetOptionTemplate, unsetValue, unsetText);
+            const string optionTemplate = "<option value=\"{0}\" {1}>{2}</option>";
+
+            var filterValue = GetModelFilter(htmlHelper.ViewData, typeof(TModel), propName, typeof(TProperty));
+            string stringValue = filterValue.Item2 ? filterValue.Item1.ToString() : "";
+            foreach (var v in values)
+            {
+                string selectedAttr = stringValue == valueSelector(v) ? "selected=\"selected\"" : "";
                 sb.AppendFormat(optionTemplate, valueSelector(v), selectedAttr, labelSelector(v));
             }
             sb.Append("</select>");
