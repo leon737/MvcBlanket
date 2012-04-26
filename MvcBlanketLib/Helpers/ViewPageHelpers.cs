@@ -64,7 +64,7 @@ namespace MvcBlanketLib.Helpers
             var span = RenderFilterItemSpan(label);
             string renderClass = !string.IsNullOrWhiteSpace(@class) ? "class=\"" + @class + "\"" : "";
             string template = "<input type=\"text\" name=\"s_{0}\" value=\"{1}\" {2}/>";
-            string result = span + string.Format(template, name, GetFilter(htmlHelper.ViewData, name), renderClass, label);
+            string result = span + string.Format(template, name, GetFilter(htmlHelper.ViewData, name), renderClass);
             return new MvcHtmlString(result);
         }
 
@@ -85,6 +85,17 @@ namespace MvcBlanketLib.Helpers
             }
             sb.Append("</select>");
             return new MvcHtmlString(span + sb.ToString());
+        }
+
+        public static MvcHtmlString FilterDateBox(this HtmlHelper htmlHelper, string name, string label = "", string @class = "")
+        {
+            var span = RenderFilterItemSpan(label);
+            string renderClass = "class=\"single-datepicker" + (!string.IsNullOrWhiteSpace(@class) ? @class : "") + "\"";
+            string template = "<input type=\"text\" value=\"{1}\" {2}/>";
+            string result = span + string.Format(template, name, GetFilter(htmlHelper.ViewData, name), renderClass);
+            template = "<input type=\"hidden\" name=\"s_{0}\" value=\"{1}\" />";
+            result += string.Format(template, name, GetFilter(htmlHelper.ViewData, name));
+            return new MvcHtmlString(result);
         }
 
         public static MvcHtmlString BeginFilterForm(this HtmlHelper htmlHelper)

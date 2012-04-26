@@ -88,6 +88,7 @@
     <Compile Include="ModelBinders\GroupEntityActionModelBinderProvider.cs" />
     <Compile Include="PageFilters\IPageFiltersModel.cs" />
     <Compile Include="PageFilters\LinqFilterExtensions.cs" />
+    <Compile Include="PageFilters\LocaleAttribute.cs" />
     <Compile Include="PageFilters\PageFilter.cs" />
     <Compile Include="PageFilters\PageFilterNotSelectedValueAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -53,7 +53,7 @@ namespace MvcBlanketLib.ActionFilters
 
                 if (!filters.ContainsKey(propertyName) || string.IsNullOrWhiteSpace(filters[propertyName]))
                 {
-                    object pageFilter1 = Activator.CreateInstance(pageFilterType, new[] { targetValue, false, exception, stringValue, notSelectedValue });
+                    object pageFilter1 = Activator.CreateInstance(pageFilterType, new[] { targetValue, false, null, stringValue, notSelectedValue });
                     property.SetValue(model, pageFilter1, null);
                     continue;
                 }
@@ -73,7 +73,7 @@ namespace MvcBlanketLib.ActionFilters
                 if (exception == null)
                 {
                     var notSelectedValueAttribute =
-                        property.GetCustomAttributes(typeof(PageFilterNotSelectedValueAttribute), false).FirstOrDefault() as PageFilterNotSelectedValueAttribute;
+                        property.GetCustomAttributes(typeof(NotSelectedValueAttribute), false).FirstOrDefault() as NotSelectedValueAttribute;
                     if (notSelectedValueAttribute != null)
                         notSelectedValue = notSelectedValueAttribute.NotSelectedValue;                        
                 }
