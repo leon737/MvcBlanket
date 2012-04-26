@@ -36,7 +36,7 @@ namespace MvcBlanketLib.ActionFilters
             }
         }
 
-        private dynamic ConvertToModel(Dictionary<string, string> filters)
+        private dynamic ConvertToModel(IDictionary<string, string> filters)
         {
             object model = Activator.CreateInstance(FiltersModel);
             var properties = FiltersModel.GetProperties();
@@ -44,6 +44,10 @@ namespace MvcBlanketLib.ActionFilters
             {
                 var targetType = property.PropertyType.GetGenericArguments()[0];
                 string propertyName = property.Name.ToLowerInvariant();
+
+                var aliasAttribute = property.GetCustomAttributes(typeof(AliasAttribute), false).FirstOrDefault() as AliasAttribute;
+                if (aliasAttribute != null)
+                    propertyName = aliasAttribute.Name;
 
                 var pageFilterType = typeof(PageFilter<>).MakeGenericType(new[] { targetType });
                 object targetValue = targetType == typeof(string) ? null : FormatterServices.GetUninitializedObject(targetType);
