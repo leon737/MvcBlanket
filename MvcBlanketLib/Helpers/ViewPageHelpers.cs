@@ -90,18 +90,25 @@ namespace MvcBlanketLib.Helpers
             var span = RenderFilterItemSpan(label);
             string renderClass = !string.IsNullOrWhiteSpace(@class) ? "class=\"" + @class + "\"" : "";
             string propName = ExpressionHelper.GetExpressionText(expression);
-            
-            string name = GetPagedFilterPropName(typeof(TProperty), propName);
+            MemberInfo mi = GetPageFilterPropertyType(expression);
+            string name = GetPageFilterPropName(mi, propName);
             const string template = "<input type=\"text\" name=\"s_{0}\" value=\"{1}\" {2}/>";
             string result = span + string.Format(template, name, GetModelFilter(htmlHelper.ViewData, typeof(TModel), propName, typeof(TProperty)), renderClass);
             return new MvcHtmlString(result);
         }
 
-       
-
-        private static string GetPagedFilterPropName(Type type, string propName)
+        private static MemberInfo GetPageFilterPropertyType<TModel, TProperty>(Expression<Func<TModel, PageFilter<TProperty>>> expression)
+            where TModel : IPageFiltersModel
         {
-            var aliasAttribute = type.GetCustomAttributes(typeof (AliasAttribute), false).FirstOrDefault() as AliasAttribute;
+            var lambda = expression.Body as MemberExpression;
+            if (lambda == null) throw new NotSupportedException("Only member access lambdas are supported");
+            return lambda.Member;
+        }
+
+
+        private static string GetPageFilterPropName(MemberInfo memberInfo, string propName)
+        {
+            var aliasAttribute = memberInfo.GetCustomAttributes(typeof (AliasAttribute), false).FirstOrDefault() as AliasAttribute;
             if (aliasAttribute != null)
                 return aliasAttribute.Name;
             return propName;
