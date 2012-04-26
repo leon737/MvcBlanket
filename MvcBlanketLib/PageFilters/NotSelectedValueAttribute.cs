@@ -15,7 +15,7 @@ using System;
 
 namespace MvcBlanketLib.PageFilters
 {
-    public class PageFilterNotSelectedValueAttribute : Attribute
+    public class NotSelectedValueAttribute : Attribute
     {
         public string NotSelectedValue { get; set; }
     }
