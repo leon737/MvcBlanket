@@ -89,10 +89,12 @@
     <Compile Include="PageFilters\AliasAttribute.cs" />
     <Compile Include="PageFilters\IPageFilter.cs" />
     <Compile Include="PageFilters\IPageFiltersModel.cs" />
+    <Compile Include="PageFilters\IRange.cs" />
     <Compile Include="PageFilters\LinqFilterExtensions.cs" />
     <Compile Include="PageFilters\LocaleAttribute.cs" />
     <Compile Include="PageFilters\PageFilter.cs" />
     <Compile Include="PageFilters\NotSelectedValueAttribute.cs" />
+    <Compile Include="PageFilters\Range.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResumingActionResult\ByteRange.cs" />
     <Compile Include="ResumingActionResult\ResumingActionResultBase.cs" />
