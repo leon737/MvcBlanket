@@ -60,6 +60,7 @@
     <Compile Include="IdentityMonadsTest.cs" />
     <Compile Include="MaybeMonadTest.cs" />
     <Compile Include="PagedViewModelTest.cs" />
+    <Compile Include="PageFilterTypeConverterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SortExtensionsTest.cs" />
   </ItemGroup>

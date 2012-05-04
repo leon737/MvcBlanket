@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 using System.Web;
 using System.Web.Mvc;
 using MvcBlanketLib.PageFilters;
+using MvcBlanketLib.TypeConverters;
 
 namespace MvcBlanketLib.ActionFilters
 {
@@ -49,7 +50,7 @@ namespace MvcBlanketLib.ActionFilters
                 if (aliasAttribute != null)
                     propertyName = aliasAttribute.Name;
 
-                var pageFilterType = typeof(PageFilter<>).MakeGenericType(new[] { targetType });
+                var pageFilterType = typeof(PageFilter<>).MakeGenericType(targetType);
                 object targetValue = targetType == typeof(string) ? null : FormatterServices.GetUninitializedObject(targetType);
                 string stringValue = string.Empty;
                 string notSelectedValue = string.Empty;
@@ -57,8 +58,8 @@ namespace MvcBlanketLib.ActionFilters
 
                 if (!filters.ContainsKey(propertyName) || string.IsNullOrWhiteSpace(filters[propertyName]))
                 {
-                    object pageFilter1 = Activator.CreateInstance(pageFilterType, new[] { targetValue, false, null, stringValue, notSelectedValue });
-                    property.SetValue(model, pageFilter1, null);
+                    object pageFilterNotSet = Activator.CreateInstance(pageFilterType, new[] { targetValue, false, null, string.Empty, string.Empty });
+                    property.SetValue(model, pageFilterNotSet, null);
                     continue;
                 }
 
@@ -66,7 +67,7 @@ namespace MvcBlanketLib.ActionFilters
 
                 try
                 {
-                    targetValue = Convert.ChangeType(stringValue, targetType);
+                    targetValue = PageFilterTypeConverter.Convert(stringValue, targetType);
 
                 }
                 catch (Exception ex)
