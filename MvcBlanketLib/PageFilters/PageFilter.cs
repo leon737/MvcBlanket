@@ -15,7 +15,7 @@ using System;
 
 namespace MvcBlanketLib.PageFilters
 {
-    public class PageFilter<T>
+    public class PageFilter<T> : IPageFilter<T>
     {
         public PageFilter(T value, bool selected, Exception formatException, string rawValue, string notSelectedValue)
         {

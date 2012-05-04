@@ -86,10 +86,15 @@
     <Compile Include="ModelBinders\FlagStringAttribute.cs" />
     <Compile Include="ModelBinders\GroupEntityActionModelBinder.cs" />
     <Compile Include="ModelBinders\GroupEntityActionModelBinderProvider.cs" />
+    <Compile Include="PageFilters\AliasAttribute.cs" />
+    <Compile Include="PageFilters\IPageFilter.cs" />
     <Compile Include="PageFilters\IPageFiltersModel.cs" />
+    <Compile Include="PageFilters\IRange.cs" />
     <Compile Include="PageFilters\LinqFilterExtensions.cs" />
+    <Compile Include="PageFilters\LocaleAttribute.cs" />
     <Compile Include="PageFilters\PageFilter.cs" />
-    <Compile Include="PageFilters\PageFilterNotSelectedValueAttribute.cs" />
+    <Compile Include="PageFilters\NotSelectedValueAttribute.cs" />
+    <Compile Include="PageFilters\Range.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResumingActionResult\ByteRange.cs" />
     <Compile Include="ResumingActionResult\ResumingActionResultBase.cs" />
@@ -97,6 +102,8 @@
     <Compile Include="ResumingActionResult\ResumingFilePathResult.cs" />
     <Compile Include="ResumingActionResult\ResumingFileStreamResult.cs" />
     <Compile Include="ResumingActionResult\ResumingRequest.cs" />
+    <Compile Include="TypeConverters\PageFilterTypeConverter.cs" />
+    <Compile Include="TypeConverters\UninitializePageFilterTypeActivator.cs" />
     <Compile Include="ViewModels\PagedViewModel.cs" />
     <Compile Include="ViewModels\PagedViewModelFactory.cs" />
   </ItemGroup>
