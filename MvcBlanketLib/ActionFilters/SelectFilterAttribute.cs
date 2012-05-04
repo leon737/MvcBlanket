@@ -51,7 +51,7 @@ namespace MvcBlanketLib.ActionFilters
                     propertyName = aliasAttribute.Name;
 
                 var pageFilterType = typeof(PageFilter<>).MakeGenericType(targetType);
-                object targetValue = targetType == typeof(string) ? null : FormatterServices.GetUninitializedObject(targetType);
+                object targetValue = UninitializePageFilterTypeActivator.CreateUnitializedObject(targetType);
                 string stringValue = string.Empty;
                 string notSelectedValue = string.Empty;
                 Exception exception = null;
@@ -88,7 +88,7 @@ namespace MvcBlanketLib.ActionFilters
             }
             return model;
         }
-
+              
         protected Dictionary<string, string> InitializeFilters(HttpRequestBase request)
         {
             var filters = new Dictionary<string, string>();

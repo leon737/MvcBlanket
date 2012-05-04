@@ -21,6 +21,8 @@ using System.Web.Mvc;
 using MvcBlanketLib.ModelBinders;
 using MvcBlanketLib.PageFilters;
 using System.Globalization;
+using System.Collections;
+using MvcBlanketLib.TypeConverters;
 
 namespace MvcBlanketLib.Helpers
 {
@@ -49,7 +51,7 @@ namespace MvcBlanketLib.Helpers
             var filtersModel = viewData["FiltersModel"];
             var property = modelType.GetProperty(propName);
             var pageFilter = property.GetValue(filtersModel, BindingFlags.GetProperty, null, null, null);
-            var pageFilterType = typeof (IPageFilter<>).MakeGenericType(new[] {propType});
+            var pageFilterType = typeof(IPageFilter<>).MakeGenericType(new[] { propType });
             var valueProperty = pageFilterType.GetProperty("Value");
             var value = valueProperty.GetValue(pageFilter, BindingFlags.GetProperty, null, null, null);
             var selectedProperty = pageFilterType.GetProperty("Selected");
@@ -87,19 +89,50 @@ namespace MvcBlanketLib.Helpers
             return new MvcHtmlString(result);
         }
 
-        public static MvcHtmlString FilterTextBox<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, 
+        public static MvcHtmlString FilterTextBox<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
             Expression<Func<TModel, PageFilter<TProperty>>> expression, string label = "", string @class = "")
             where TModel : IPageFiltersModel
         {
+
+            bool isRange = typeof(TProperty).IsGenericType && typeof(TProperty).GetGenericTypeDefinition() == typeof(IRange<>);
             var span = RenderFilterItemSpan(label);
+            if (isRange)
+            {
+                if (string.IsNullOrWhiteSpace(@class)) @class = "range";
+                else @class += " range";
+            }
             string renderClass = !string.IsNullOrWhiteSpace(@class) ? "class=\"" + @class + "\"" : "";
             string propName = ExpressionHelper.GetExpressionText(expression);
             MemberInfo mi = GetPageFilterPropertyType(expression);
             string name = GetPageFilterPropName(mi, propName);
             const string template = "<input type=\"text\" name=\"s_{0}\" value=\"{1}\" {2}/>";
             var filterValue = GetModelFilter(htmlHelper.ViewData, typeof(TModel), propName, typeof(TProperty));
+            if (isRange)
+            {
+                object lowerBound, upperBound;
+                ExtractRangeValues(typeof(TProperty), filterValue.Item1, out lowerBound, out upperBound);
+                string separatorSpan = "<span>&nbsp;-&nbsp;</span>";
+                string rangeResult = span + string.Format(template, name, filterValue.Item2 ? lowerBound.ToString() : "", renderClass) +
+                    separatorSpan + string.Format(template, name, filterValue.Item2 ? upperBound.ToString() : "", renderClass);
+                return new MvcHtmlString(rangeResult);
+            }
             string result = span + string.Format(template, name, filterValue.Item2 ? filterValue.Item1 : "", renderClass);
             return new MvcHtmlString(result);
+        }
+
+        private static void ExtractRangeValues(Type propType, object value, out object lowerBound, out object upperBound)
+        {
+            if (value == null)
+            {
+                Type generic = propType.GetGenericArguments()[0];
+                lowerBound = UninitializePageFilterTypeActivator.CreateUnitializedObject(generic);
+                upperBound = lowerBound;
+                return;
+            }
+            var lowerBoundProp = propType.GetProperty("LowerBound");
+            var upperBoundProp = propType.GetProperty("UpperBound");
+            lowerBound = lowerBoundProp.GetValue(value, null);
+            upperBound = upperBoundProp.GetValue(value, null);
         }
 
         private static MemberInfo GetPageFilterPropertyType<TModel, TProperty>(Expression<Func<TModel, PageFilter<TProperty>>> expression)
@@ -113,7 +146,7 @@ namespace MvcBlanketLib.Helpers
 
         private static string GetPageFilterPropName(MemberInfo memberInfo, string propName)
         {
-            var aliasAttribute = memberInfo.GetCustomAttributes(typeof (AliasAttribute), false).FirstOrDefault() as AliasAttribute;
+            var aliasAttribute = memberInfo.GetCustomAttributes(typeof(AliasAttribute), false).FirstOrDefault() as AliasAttribute;
             if (aliasAttribute != null)
                 return aliasAttribute.Name;
             return propName.ToLowerInvariant();
@@ -146,7 +179,7 @@ namespace MvcBlanketLib.Helpers
             return new MvcHtmlString(span + sb);
         }
 
-        public static MvcHtmlString FilterDropDownList<T, TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, 
+        public static MvcHtmlString FilterDropDownList<T, TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
             Expression<Func<TModel, PageFilter<TProperty>>> expression, string unsetValue, string unsetText,
             IEnumerable<T> values, Func<T, string> valueSelector, Func<T, string> labelSelector, string label = "", string @class = "")
              where TModel : IPageFiltersModel
@@ -174,6 +207,44 @@ namespace MvcBlanketLib.Helpers
             return new MvcHtmlString(span + sb);
         }
 
+        public static MvcHtmlString FilterList<T, TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
+            Expression<Func<TModel, PageFilter<TProperty>>> expression, 
+            IEnumerable<T> values, Func<T, string> valueSelector, Func<T, string> labelSelector, string label = "", string @class = "")
+             where TModel : IPageFiltersModel
+        {
+            var span = RenderFilterItemSpan(label);
+            string propName = ExpressionHelper.GetExpressionText(expression);
+            MemberInfo mi = GetPageFilterPropertyType(expression);
+            string name = GetPageFilterPropName(mi, propName);
+
+            var sb = new StringBuilder();
+            const string selectTemplate = "<select name=\"s_{0}\" multiple=\"multiple\">";
+            sb.AppendFormat(selectTemplate, name);            
+            const string optionTemplate = "<option value=\"{0}\" {1}>{2}</option>";
+
+            var filterValue = GetModelFilter(htmlHelper.ViewData, typeof(TModel), propName, typeof(TProperty));
+            var selectedValues =  filterValue.Item1 != null ? ConvertSelectedEnumerableToString((IEnumerable)filterValue.Item1, typeof(TProperty)) : Enumerable.Empty<string>();
+            foreach (var v in values)
+            {
+                string targetValue = valueSelector(v);
+                string selectedAttr = (filterValue.Item2 && selectedValues.Contains(targetValue)) ? "selected=\"selected\"" : "";
+                sb.AppendFormat(optionTemplate, valueSelector(v), selectedAttr, labelSelector(v));
+            }
+            sb.Append("</select>");
+            return new MvcHtmlString(span + sb);
+        }
+
+        private static IEnumerable<string> ConvertSelectedEnumerableToString(IEnumerable c, Type propType)
+        {
+            var result = new List<string>();
+            foreach (var entry in c)
+            {
+                string stringValue = entry.ToString();
+                result.Add(stringValue);
+            }
+            return result;
+        }
+
         public static MvcHtmlString FilterDateBox(this HtmlHelper htmlHelper, string name, string label = "", string @class = "")
         {
             var span = RenderFilterItemSpan(label);
@@ -185,22 +256,48 @@ namespace MvcBlanketLib.Helpers
             return new MvcHtmlString(result);
         }
 
-        public static MvcHtmlString FilterDateBox<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, 
+        public static MvcHtmlString FilterDateBox<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel,
             PageFilter<TProperty>>> expression, string label = "", string @class = "")
               where TModel : IPageFiltersModel
         {
             var span = RenderFilterItemSpan(label);
+
+            bool isRange = typeof(TProperty).IsGenericType && typeof(TProperty).GetGenericTypeDefinition() == typeof(IRange<>);
+            if (isRange)
+            {
+                if (string.IsNullOrWhiteSpace(@class)) @class = " range";
+                else @class += " range";
+            }
             string renderClass = "class=\"single-datepicker" + (!string.IsNullOrWhiteSpace(@class) ? @class : "") + "\"";
             string propName = ExpressionHelper.GetExpressionText(expression);
             MemberInfo mi = GetPageFilterPropertyType(expression);
             string name = GetPageFilterPropName(mi, propName);
             string template = "<input type=\"text\" value=\"{1}\" {2}/>";
+            string hiddenFieldTemplate = "<input type=\"hidden\" name=\"s_{0}\" value=\"{1}\" />";
             var filterValue = GetModelFilter(htmlHelper.ViewData, typeof(TModel), propName, typeof(TProperty));
-            DateTime value = (DateTime)filterValue.Item1;            
+
+            if (isRange)
+            {
+                object lowerBound, upperBound;
+                ExtractRangeValues(typeof(TProperty), filterValue.Item1, out lowerBound, out upperBound);
+                string separatorSpan = "<span>&nbsp;-&nbsp;</span>";
+
+                DateTime lowerBoundValue = (DateTime)lowerBound;
+                DateTime upperBoundValue = (DateTime)upperBound;
+                string lowerBoundStringValue = filterValue.Item2 ? lowerBoundValue.ToString("d", GetPageFilterPropCultureInfo(mi)) : "";
+                string upperBoundStringValue = filterValue.Item2 ? upperBoundValue.ToString("d", GetPageFilterPropCultureInfo(mi)) : "";
+
+                string rangeResult = span + string.Format(template, name, lowerBoundStringValue, renderClass) +
+                    string.Format(hiddenFieldTemplate, name, "") +
+                    separatorSpan + string.Format(template, name, upperBoundStringValue, renderClass) +
+                    string.Format(hiddenFieldTemplate, name, "");
+                return new MvcHtmlString(rangeResult);
+            }
+
+            DateTime value = (DateTime)filterValue.Item1;
             string stringValue = filterValue.Item2 ? value.ToString("d", GetPageFilterPropCultureInfo(mi)) : "";
             string result = span + string.Format(template, name, stringValue, renderClass);
-            template = "<input type=\"hidden\" name=\"s_{0}\" value=\"{1}\" />";
-            result += string.Format(template, name, GetFilter(htmlHelper.ViewData, name));
+            result += string.Format(hiddenFieldTemplate, name, GetFilter(htmlHelper.ViewData, name));
             return new MvcHtmlString(result);
         }
 
@@ -210,7 +307,7 @@ namespace MvcBlanketLib.Helpers
             return new MvcHtmlString(template);
         }
 
-        static string RenderFilterItemSpan(string label) 
+        static string RenderFilterItemSpan(string label)
         {
             if (string.IsNullOrWhiteSpace(label)) return string.Empty;
             return string.Format("<span>{0}</span>", label);

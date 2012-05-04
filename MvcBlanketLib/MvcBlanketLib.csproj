@@ -103,6 +103,7 @@
     <Compile Include="ResumingActionResult\ResumingFileStreamResult.cs" />
     <Compile Include="ResumingActionResult\ResumingRequest.cs" />
     <Compile Include="TypeConverters\PageFilterTypeConverter.cs" />
+    <Compile Include="TypeConverters\UninitializePageFilterTypeActivator.cs" />
     <Compile Include="ViewModels\PagedViewModel.cs" />
     <Compile Include="ViewModels\PagedViewModelFactory.cs" />
   </ItemGroup>
