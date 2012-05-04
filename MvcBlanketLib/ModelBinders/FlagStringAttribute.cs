@@ -11,17 +11,16 @@ You should have received a copy of the GNU Lesser General Public License along w
 if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA 
 */
 
-using System;
-using System.Linq;
-using System.Linq.Expressions;
 
-namespace MvcBlanketLib.PageFilters
+using System;
+
+namespace MvcBlanketLib.ModelBinders
 {
-    public static class LinqFilterExtensions
+    [AttributeUsage(AttributeTargets.Field, Inherited = false, AllowMultiple = false)]
+    public sealed class FlagStringAttribute : Attribute
     {
-        public static IQueryable<TSource> Where<TSource, TFilterType>(this IQueryable<TSource> query, PageFilter<TFilterType> filter, Expression<Func<TSource, bool>> predicate)
-        {
-            return (filter.Selected && !filter.RawValue.Equals(filter.NotSelectedValue)) ? query.Where(predicate) : query; 
-        }
+
+        public string StringRepresentation { get; set; }
+
     }
 }

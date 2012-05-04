@@ -11,17 +11,27 @@ You should have received a copy of the GNU Lesser General Public License along w
 if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA 
 */
 
-using System;
-using System.Linq;
-using System.Linq.Expressions;
-
 namespace MvcBlanketLib.PageFilters
 {
-    public static class LinqFilterExtensions
+    public class Range<T> : IRange<T>
     {
-        public static IQueryable<TSource> Where<TSource, TFilterType>(this IQueryable<TSource> query, PageFilter<TFilterType> filter, Expression<Func<TSource, bool>> predicate)
+        private readonly T lowerBound;
+        private readonly T upperBound;
+
+        public Range(T lowerBound, T upperBound)
         {
-            return (filter.Selected && !filter.RawValue.Equals(filter.NotSelectedValue)) ? query.Where(predicate) : query; 
+            this.lowerBound = lowerBound;
+            this.upperBound = upperBound;
+        }
+
+        public T LowerBound
+        {
+            get { return lowerBound; }
+        }
+
+        public T UpperBound
+        {
+            get { return upperBound; }
         }
     }
 }

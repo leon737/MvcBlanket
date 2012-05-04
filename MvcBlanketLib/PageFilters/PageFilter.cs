@@ -15,13 +15,14 @@ using System;
 
 namespace MvcBlanketLib.PageFilters
 {
-    public class PageFilter<T>
+    public class PageFilter<T> : IPageFilter<T>
     {
-        public PageFilter(T value, bool selected, Exception formatException, T notSelectedValue)
+        public PageFilter(T value, bool selected, Exception formatException, string rawValue, string notSelectedValue)
         {
             this.value = value;
             this.selected = selected;
             this.formatException = formatException;
+            this.rawValue = rawValue;
             this.notSelectedValue = notSelectedValue;
         }
 
@@ -29,6 +30,12 @@ namespace MvcBlanketLib.PageFilters
         public T Value
         {
             get { return value; }
+        }
+
+        private readonly string rawValue;
+        internal string RawValue
+        {
+            get { return rawValue; }
         }
 
         private readonly bool selected;
@@ -43,8 +50,8 @@ namespace MvcBlanketLib.PageFilters
             get { return formatException; }
         }
 
-        private readonly T notSelectedValue;
-        internal T NotSelectedValue
+        private readonly string notSelectedValue;
+        internal string NotSelectedValue
         {
             get { return notSelectedValue; }
         }

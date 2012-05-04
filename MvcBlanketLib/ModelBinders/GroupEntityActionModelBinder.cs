@@ -14,31 +14,50 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Web.Mvc;
 
 namespace MvcBlanketLib.ModelBinders
 {
-    public class GroupEntityActionModelBinder<T> : IModelBinder
+    public class GroupEntityActionModelBinder<TAction, TValues> : IModelBinder
     {
         public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
             var formData = controllerContext.HttpContext.Request.Form;
             var action = formData["action"];
             var ids = formData["chk"].Split(',').Where(s => !string.IsNullOrWhiteSpace(s));
-            var groupAction = new GroupAction<T> { Action = action, Identifiers = ids.Select(i => (T)Convert.ChangeType(i, typeof(T))) };
-            return groupAction;
+            if (typeof(TAction) != typeof(string))
+                return new GroupAction<TAction, TValues> { Action = ConvertAction(action), Identifiers = ids.Select(i => (TValues)Convert.ChangeType(i, typeof(TValues))) };
+            return new GroupAction<TValues> { Action = action, Identifiers = ids.Select(i => (TValues)Convert.ChangeType(i, typeof(TValues))) };
+        }
+
+        private static TAction ConvertAction(string action)
+        {
+            return typeof(TAction).IsEnum ? ((ActionEnumConverter<TAction>)action).Value : (TAction)Convert.ChangeType(action, typeof(TAction));
         }
     }
 
-    public interface IGroupAction
+    internal class ActionEnumConverter<T> : FlagBase<ActionEnumConverter<T>, T>
     {
+        public ActionEnumConverter() { }
 
+        public ActionEnumConverter(T enumValue)
+        {
+            Flag = enumValue;
+        }
+
+        public T Value
+        {
+            get { return Flag; }
+        }
     }
 
-    public class GroupAction<T> : IGroupAction
+    public interface IGroupAction { }
+
+    public class GroupAction<T> : GroupAction<string, T> { }
+
+    public class GroupAction<TAction, TValues> : IGroupAction
     {
-        public string Action { get; internal set; }
-        public IEnumerable<T> Identifiers { get; internal set; }
+        public TAction Action { get; internal set; }
+        public IEnumerable<TValues> Identifiers { get; internal set; }
     }
 }

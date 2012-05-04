@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 using System.Web;
 using System.Web.Mvc;
 using MvcBlanketLib.PageFilters;
+using MvcBlanketLib.TypeConverters;
 
 namespace MvcBlanketLib.ActionFilters
 {
@@ -36,7 +37,7 @@ namespace MvcBlanketLib.ActionFilters
             }
         }
 
-        private dynamic ConvertToModel(Dictionary<string, string> filters)
+        private dynamic ConvertToModel(IDictionary<string, string> filters)
         {
             object model = Activator.CreateInstance(FiltersModel);
             var properties = FiltersModel.GetProperties();
@@ -45,23 +46,28 @@ namespace MvcBlanketLib.ActionFilters
                 var targetType = property.PropertyType.GetGenericArguments()[0];
                 string propertyName = property.Name.ToLowerInvariant();
 
-                var pageFilterType = typeof(PageFilter<>).MakeGenericType(new[] { targetType });
-                object targetValue = targetType == typeof(string) ? null : FormatterServices.GetUninitializedObject(targetType);
-                object notSelectedValue = targetType == typeof(string) ? null : FormatterServices.GetUninitializedObject(targetType);
+                var aliasAttribute = property.GetCustomAttributes(typeof(AliasAttribute), false).FirstOrDefault() as AliasAttribute;
+                if (aliasAttribute != null)
+                    propertyName = aliasAttribute.Name;
+
+                var pageFilterType = typeof(PageFilter<>).MakeGenericType(targetType);
+                object targetValue = UninitializePageFilterTypeActivator.CreateUnitializedObject(targetType);
+                string stringValue = string.Empty;
+                string notSelectedValue = string.Empty;
                 Exception exception = null;
 
                 if (!filters.ContainsKey(propertyName) || string.IsNullOrWhiteSpace(filters[propertyName]))
                 {
-                    object pageFilter1 = Activator.CreateInstance(pageFilterType, new[] { targetValue, false, exception, notSelectedValue });
-                    property.SetValue(model, pageFilter1, null);
+                    object pageFilterNotSet = Activator.CreateInstance(pageFilterType, new[] { targetValue, false, null, string.Empty, string.Empty });
+                    property.SetValue(model, pageFilterNotSet, null);
                     continue;
                 }
 
-                string stringValue = filters[propertyName];
+                stringValue = filters[propertyName];
 
                 try
                 {
-                    targetValue = Convert.ChangeType(stringValue, targetType);
+                    targetValue = PageFilterTypeConverter.Convert(stringValue, targetType);
 
                 }
                 catch (Exception ex)
@@ -72,28 +78,17 @@ namespace MvcBlanketLib.ActionFilters
                 if (exception == null)
                 {
                     var notSelectedValueAttribute =
-                        property.GetCustomAttributes(typeof(PageFilterNotSelectedValueAttribute), false).FirstOrDefault() as PageFilterNotSelectedValueAttribute;
+                        property.GetCustomAttributes(typeof(NotSelectedValueAttribute), false).FirstOrDefault() as NotSelectedValueAttribute;
                     if (notSelectedValueAttribute != null)
-                    {
-                        string stringNotSelectedValue = notSelectedValueAttribute.NotSelectedValue;
-                        try
-                        {
-                            notSelectedValue = Convert.ChangeType(stringNotSelectedValue, targetType);
-
-                        }
-                        catch (Exception ex)
-                        {
-                            exception = ex;
-                        }
-                    }
+                        notSelectedValue = notSelectedValueAttribute.NotSelectedValue;                        
                 }
 
-                object pageFilter = Activator.CreateInstance(pageFilterType, new[] { targetValue, exception == null, exception, notSelectedValue });
+                object pageFilter = Activator.CreateInstance(pageFilterType, new[] { targetValue, exception == null, exception, stringValue, notSelectedValue });
                 property.SetValue(model, pageFilter, null);
             }
             return model;
         }
-
+              
         protected Dictionary<string, string> InitializeFilters(HttpRequestBase request)
         {
             var filters = new Dictionary<string, string>();

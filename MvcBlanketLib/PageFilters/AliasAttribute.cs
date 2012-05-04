@@ -12,16 +12,11 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 */
 
 using System;
-using System.Linq;
-using System.Linq.Expressions;
 
 namespace MvcBlanketLib.PageFilters
 {
-    public static class LinqFilterExtensions
+    public class AliasAttribute : Attribute
     {
-        public static IQueryable<TSource> Where<TSource, TFilterType>(this IQueryable<TSource> query, PageFilter<TFilterType> filter, Expression<Func<TSource, bool>> predicate)
-        {
-            return (filter.Selected && !filter.RawValue.Equals(filter.NotSelectedValue)) ? query.Where(predicate) : query; 
-        }
+        public string Name { get; set; }
     }
 }

@@ -12,16 +12,23 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
+using System.Text;
+using System.Runtime.Serialization;
 
-namespace MvcBlanketLib.PageFilters
+namespace MvcBlanketLib.TypeConverters
 {
-    public static class LinqFilterExtensions
+    internal static class UninitializePageFilterTypeActivator
     {
-        public static IQueryable<TSource> Where<TSource, TFilterType>(this IQueryable<TSource> query, PageFilter<TFilterType> filter, Expression<Func<TSource, bool>> predicate)
+        public static object CreateUnitializedObject(Type targetType)
         {
-            return (filter.Selected && !filter.RawValue.Equals(filter.NotSelectedValue)) ? query.Where(predicate) : query; 
+            if (targetType == typeof(string)) return null;
+            if (targetType.IsGenericType) 
+            {
+                return null;
+            }
+            return FormatterServices.GetUninitializedObject(targetType);
         }
     }
 }

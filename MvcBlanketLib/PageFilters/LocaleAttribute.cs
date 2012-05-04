@@ -12,16 +12,31 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 */
 
 using System;
-using System.Linq;
-using System.Linq.Expressions;
+using System.Globalization;
 
 namespace MvcBlanketLib.PageFilters
 {
-    public static class LinqFilterExtensions
+    public class LocaleAttribute : Attribute
     {
-        public static IQueryable<TSource> Where<TSource, TFilterType>(this IQueryable<TSource> query, PageFilter<TFilterType> filter, Expression<Func<TSource, bool>> predicate)
+        public string LocaleName { get; set; }
+        public bool UseClientLocale { get; set; }
+
+        public LocaleAttribute()
         {
-            return (filter.Selected && !filter.RawValue.Equals(filter.NotSelectedValue)) ? query.Where(predicate) : query; 
+            UseClientLocale = true;
+        }
+
+        public LocaleAttribute(string localeName)
+        {
+            LocaleName = localeName;
+            UseClientLocale = false;
+        }
+
+        public CultureInfo GetSelectedCultureInfo ()
+        {
+            if (UseClientLocale)
+                return CultureInfo.CurrentUICulture;
+            return CultureInfo.CreateSpecificCulture(LocaleName);
         }
     }
 }
