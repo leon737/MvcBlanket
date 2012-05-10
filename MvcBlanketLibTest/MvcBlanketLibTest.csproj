@@ -67,6 +67,7 @@
     <Compile Include="ActionFiltersTests\SelectFilterAttributeTests.cs" />
     <Compile Include="IdentityMonadsTest.cs" />
     <Compile Include="MaybeMonadTest.cs" />
+    <Compile Include="ModelBindersTests\FlagStringAttributeTests.cs" />
     <Compile Include="PagedViewModelTest.cs" />
     <Compile Include="PageFilterTypeConverterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
