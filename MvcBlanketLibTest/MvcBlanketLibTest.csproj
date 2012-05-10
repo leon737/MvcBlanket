@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionFiltersTests\NavigatedAttributeTests.cs" />
+    <Compile Include="ActionFiltersTests\SelectFilterAttributeTests.cs" />
     <Compile Include="IdentityMonadsTest.cs" />
     <Compile Include="MaybeMonadTest.cs" />
     <Compile Include="PagedViewModelTest.cs" />
