@@ -70,10 +70,14 @@
     <Compile Include="ModelBindersTests\FlagStringAttributeTests.cs" />
     <Compile Include="ModelBindersTests\GroupEntityActionModelBinderProviderTests.cs" />
     <Compile Include="ModelBindersTests\GroupEntityActionModelBinderTests.cs" />
-    <Compile Include="PagedViewModelTest.cs" />
     <Compile Include="PageFilterTypeConverterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SortExtensionsTest.cs" />
+    <Compile Include="ViewModelTests\FakeEntity.cs" />
+    <Compile Include="ViewModelTests\FakeFiltersModel.cs" />
+    <Compile Include="ViewModelTests\FakeRepository.cs" />
+    <Compile Include="ViewModelTests\PagedViewModelFactoryTests.cs" />
+    <Compile Include="ViewModelTests\PagedViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MvcBlanketLib\MvcBlanketLib.csproj">
