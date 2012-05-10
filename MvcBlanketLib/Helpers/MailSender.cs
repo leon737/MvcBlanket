@@ -29,6 +29,11 @@ namespace MvcBlanketLib.Helpers
 
         string body;
 
+        //TODO: merge all create methods, all methods should use the strategies to get template,
+        //TODO: mail service process queue method should also be based on the strategies to choose processing pipeline
+        //TODO: (one with send invoke, other without, etc)
+
+
         public static MailSender Create(Type t, string templatePath, IDictionary<string, object> data)
         {
             MailSender sender = new MailSender();
