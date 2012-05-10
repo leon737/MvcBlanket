@@ -66,6 +66,7 @@
     <Compile Include="ActionFiltersTests\NavigatedAttributeTests.cs" />
     <Compile Include="ActionFiltersTests\SelectFilterAttributeTests.cs" />
     <Compile Include="IdentityMonadsTest.cs" />
+    <Compile Include="MailTests\MailServiceTests.cs" />
     <Compile Include="MaybeMonadTest.cs" />
     <Compile Include="ModelBindersTests\FlagStringAttributeTests.cs" />
     <Compile Include="ModelBindersTests\GroupEntityActionModelBinderProviderTests.cs" />
@@ -87,6 +88,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MailTests\TestTemplate.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
