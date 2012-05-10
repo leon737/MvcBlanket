@@ -68,6 +68,7 @@
     <Compile Include="IdentityMonadsTest.cs" />
     <Compile Include="MaybeMonadTest.cs" />
     <Compile Include="ModelBindersTests\FlagStringAttributeTests.cs" />
+    <Compile Include="ModelBindersTests\GroupEntityActionModelBinderProviderTests.cs" />
     <Compile Include="PagedViewModelTest.cs" />
     <Compile Include="PageFilterTypeConverterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
