@@ -24,7 +24,7 @@ namespace MvcBlanketLib.Helpers
 {
     public class MailSender
     {
-        public MailTemplateLocatorBase TemplateLocator { get; set; }
+        public IMailTemplateLocator TemplateLocator { get; set; }
 
         string body;
 
@@ -33,34 +33,18 @@ namespace MvcBlanketLib.Helpers
         //TODO: (one with send invoke, other without, etc)
 
 
-        private void Initialize(IDictionary<string, object> data)
+        private void Initialize(string templatePath, IDictionary<string, object> data)
         {
             var repository = new NVelocityTemplateRepository(".");
-            body = repository.RenderTemplateContent(TemplateLocator.TemplateContent, data);
+            body = repository.RenderTemplateContent(TemplateLocator.GetTemplateContent(templatePath), data);
         }
 
-        private static MailSender CreateInternal(MailTemplateLocatorBase templateLocator, IDictionary<string, object> data )
+        public static MailSender Create(IMailTemplateLocator templateLocator, string templatePath, IDictionary<string, object> data)
         {
             var sender = new MailSender {TemplateLocator = templateLocator};
-            sender.Initialize(data);
+            sender.Initialize(templatePath, data);
             return sender;
         }
-
-        public static MailSender Create(Type assemblyType, string templatePath, IDictionary<string, object> data)
-        {
-            return CreateInternal(new ResourceLocator(assemblyType, templatePath), data);
-        }
-
-        public static MailSender Create(Assembly assembly, string templatePath, IDictionary<string, object> data)
-        {
-            return CreateInternal(new ResourceLocator(assembly, templatePath), data);
-        }
-
-        public static MailSender Create(string templatePath, IDictionary<string, object> data)
-        {
-            return CreateInternal(new FileLocator(templatePath), data);
-        }
-
 
         public void Send(string subject, string recipient)
         {

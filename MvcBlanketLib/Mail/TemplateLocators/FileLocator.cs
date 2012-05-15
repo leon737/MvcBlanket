@@ -16,22 +16,16 @@ using System.Web.Hosting;
 
 namespace MvcBlanketLib.Mail.TemplateLocators
 {
-    public class FileLocator : MailTemplateLocatorBase
+    public class FileLocator : IMailTemplateLocator
     {
-        public FileLocator(string templatePath) : base(templatePath)
-        {
-        }
 
-        public override string TemplateContent
+        public string GetTemplateContent(string templatePath)
         {
-            get
+            var fileName = HostingEnvironment.MapPath(templatePath);
+            using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            using (var sr = new StreamReader(fs))
             {
-                var fileName = HostingEnvironment.MapPath(TemplatePath);
-                using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-                using (var sr = new StreamReader(fs))
-                {
-                   return sr.ReadToEnd();
-                }
+                return sr.ReadToEnd();
             }
         }
     }

@@ -13,15 +13,8 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 
 namespace MvcBlanketLib.Mail.TemplateLocators
 {
-    public abstract class MailTemplateLocatorBase
+    public interface IMailTemplateLocator
     {
-        protected string TemplatePath;
-
-        protected MailTemplateLocatorBase(string templatePath)
-        {
-            TemplatePath = templatePath;
-        }
-
-        public abstract string TemplateContent { get; }
+        string GetTemplateContent(string templatePath);
     }
 }

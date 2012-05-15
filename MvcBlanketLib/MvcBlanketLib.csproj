@@ -81,7 +81,7 @@
     <Compile Include="Helpers\ViewPageHelpers.cs" />
     <Compile Include="Mail\IMailStorage.cs" />
     <Compile Include="Mail\TemplateLocators\FileLocator.cs" />
-    <Compile Include="Mail\TemplateLocators\MailTemplateLocatorBase.cs" />
+    <Compile Include="Mail\TemplateLocators\IMailTemplateLocator.cs" />
     <Compile Include="Mail\Mail.cs" />
     <Compile Include="Mail\MailService.cs" />
     <Compile Include="Mail\TemplateLocators\ResourceLocator.cs" />

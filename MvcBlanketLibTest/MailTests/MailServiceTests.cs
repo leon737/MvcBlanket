@@ -12,12 +12,14 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 */
 
 using System;
+using System.Reflection;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcBlanketLib.Mail;
 using Moq;
+using MvcBlanketLib.Mail.TemplateLocators;
 
 namespace MvcBlanketLibTest.MailTests
 {
@@ -34,7 +36,8 @@ namespace MvcBlanketLibTest.MailTests
         public void TestRegisterMail()
         {
             var storage = mailStorage.Object;
-            var mailService = MailService.Instance.RegisterStorage(storage).RegisterAssembly(this.GetType().Assembly);
+            var templateLocator = new ResourceLocator(this.GetType().Assembly);
+            var mailService = MailService.Instance.RegisterStorage(storage).RegisterTemplateLocator(templateLocator);
             var mail = mailService.RegisterMail(RecipientEmail, TemplateName);
             Assert.IsNotNull(mail);
         }
@@ -43,7 +46,8 @@ namespace MvcBlanketLibTest.MailTests
         public void TestAddVariableToMail()
         {
             var storage = mailStorage.Object;
-            var mailService = MailService.Instance.RegisterStorage(storage).RegisterAssembly(this.GetType().Assembly);
+            var templateLocator = new ResourceLocator(this.GetType().Assembly);
+            var mailService = MailService.Instance.RegisterStorage(storage).RegisterTemplateLocator(templateLocator);
             var mail = mailService.RegisterMail(RecipientEmail, TemplateName);
             mail.AddVariable("StringVariable", "StringValue").AddVariable("IntVariable", 10).AddVariable(
                 "BoolVariable", true);
@@ -59,7 +63,8 @@ namespace MvcBlanketLibTest.MailTests
         public void TestSaveMailToPipeline()
         {
             var storage = mailStorage.Object;
-            var mailService = MailService.Instance.RegisterStorage(storage).RegisterAssembly(this.GetType().Assembly);
+            var templateLocator = new ResourceLocator(this.GetType().Assembly);
+            var mailService = MailService.Instance.RegisterStorage(storage).RegisterTemplateLocator(templateLocator);
             var mail = mailService.RegisterMail(RecipientEmail, TemplateName);
             mail.AddVariable("StringVariable", "StringValue").AddVariable("IntVariable", 10).AddVariable(
                 "BoolVariable", true).Save();
@@ -70,7 +75,8 @@ namespace MvcBlanketLibTest.MailTests
         public void TestMailServiceProcessEmptyMailQueue()
         {
             var storage = mailStorage.Object;
-            var mailService = MailService.Instance.RegisterStorage(storage).RegisterAssembly(this.GetType().Assembly);
+            var templateLocator = new ResourceLocator(this.GetType().Assembly);
+            var mailService = MailService.Instance.RegisterStorage(storage).RegisterTemplateLocator(templateLocator);
             MailService.Instance.ProcessQueue();
             mailStorage.Verify(m => m.DeserializeMail());
         }
@@ -93,7 +99,8 @@ namespace MvcBlanketLibTest.MailTests
                                                                           .Callback(() => calls++);
             mailStorage.SetupGet(m => m.TemplatesDirectory).Returns("~/MailTests");
             var storage = mailStorage.Object;
-            var mailService = MailService.Instance.RegisterStorage(storage).RegisterAssembly(this.GetType().Assembly);
+            var templateLocator = new ResourceLocator(this.GetType().Assembly);
+            var mailService = MailService.Instance.RegisterStorage(storage).RegisterTemplateLocator(templateLocator);
             MailService.Instance.ProcessQueue();
             mailStorage.Verify(m => m.DeserializeMail(), Times.Exactly(2));
         }

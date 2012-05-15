@@ -22,6 +22,6 @@ namespace MvcBlanketLib.Mail
     {
         void SerializeMail(Mail mail);
         Mail DeserializeMail();
-        string TemplatesDirectory { get; }
+        string TemplatesPath { get; }
     }
 }

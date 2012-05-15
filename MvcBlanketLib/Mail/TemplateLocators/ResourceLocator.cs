@@ -17,32 +17,29 @@ using System.Reflection;
 
 namespace MvcBlanketLib.Mail.TemplateLocators
 {
-    public class ResourceLocator : MailTemplateLocatorBase
+    public class ResourceLocator : IMailTemplateLocator
     {
         private readonly Assembly assembly;
 
-        public ResourceLocator(Assembly assembly, string templatePath) : base(templatePath)
+        public ResourceLocator(Assembly assembly)
         {
             this.assembly = assembly;
         }
 
-        public ResourceLocator(Type assemblyType, string templatePath) : base(templatePath)
+        public ResourceLocator(Type assemblyType)
         {
             assembly = Assembly.GetAssembly(assemblyType);
         }
 
-        public override string TemplateContent
+        public string GetTemplateContent(string templatePath)
         {
-            get
-            {
-                var stream = assembly.GetManifestResourceStream(TemplatePath);
-                if (stream != null)
-                    using (var sr = new StreamReader(stream))
-                    {
-                        return sr.ReadToEnd();
-                    }
-                throw new ArgumentException("Cannot find a template within path: " + TemplatePath);
-            }
+            var stream = assembly.GetManifestResourceStream(templatePath);
+            if (stream != null)
+                using (var sr = new StreamReader(stream))
+                {
+                    return sr.ReadToEnd();
+                }
+            throw new ArgumentException("Cannot find a template within path: " + templatePath);
         }
     }
 }
