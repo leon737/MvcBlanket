@@ -45,9 +45,6 @@ namespace MvcBlanketLibTest.ActionFiltersTests
             httpRequest.Setup(m => m.QueryString).Returns(queryString);
         }
 
-        private TestContext testContextInstance;
-
-
         [TestMethod]
         public void TestParseFilterModel()
         {

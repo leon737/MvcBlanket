@@ -19,6 +19,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcBlanketLib.Mail;
 using Moq;
+using MvcBlanketLib.Mail.Factories;
 using MvcBlanketLib.Mail.TemplateLocators;
 
 namespace MvcBlanketLibTest.MailTests
@@ -100,7 +101,7 @@ namespace MvcBlanketLibTest.MailTests
             mailStorage.SetupGet(m => m.TemplatesPath).Returns("MvcBlanketLibTest.MailTests.");
             var storage = mailStorage.Object;
             var templateLocator = new ResourceLocator(this.GetType().Assembly);
-            var mailService = MailService.Instance.RegisterStorage(storage).RegisterTemplateLocator(templateLocator);
+            var mailService = MailService.Instance.RegisterStorage(storage).RegisterTemplateLocator(templateLocator).RegisterMailSenderFactory(new MailSenderFactory());
             MailService.Instance.ProcessQueue();
             mailStorage.Verify(m => m.DeserializeMail(), Times.Exactly(2));
         }

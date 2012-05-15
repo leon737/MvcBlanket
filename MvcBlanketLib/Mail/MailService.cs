@@ -11,9 +11,9 @@ You should have received a copy of the GNU Lesser General Public License along w
 if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA 
 */
 
-using MvcBlanketLib.Helpers;
 using System.Net.Mail;
 using System.Configuration;
+using MvcBlanketLib.Mail.Factories;
 using MvcBlanketLib.Mail.TemplateLocators;
 
 namespace MvcBlanketLib.Mail
@@ -31,8 +31,8 @@ namespace MvcBlanketLib.Mail
 // ReSharper restore InconsistentNaming
 
         private IMailTemplateLocator templateLocator;
-
-		IMailStorage storage;
+		private IMailStorage storage;
+	    private IMailSenderFactory factory;
 
 		public static MailService Instance
 		{
@@ -55,6 +55,13 @@ namespace MvcBlanketLib.Mail
 			this.storage = storage;
 			return this;
 		}
+
+        public MailService RegisterMailSenderFactory(IMailSenderFactory factory)
+        {
+            this.factory = factory;
+            return this;
+        }
+
 // ReSharper restore ParameterHidesMember
 
         public Mail RegisterMail(string recipientEmail, string templateName)
@@ -67,12 +74,12 @@ namespace MvcBlanketLib.Mail
 
 		public void ProcessQueue()
 		{
-			if (storage == null || templateLocator == null) return;
+			if (storage == null || templateLocator == null || factory == null) return;
 			for (; ; )
 			{
 				var mail = storage.DeserializeMail();
 				if (mail == null) return;
-				var sender = MailSender.Create(templateLocator, storage.TemplatesPath + mail.TemplateName + ".txt", mail.Variables);
+				var sender =  factory.GetMailSender(templateLocator, storage.TemplatesPath + mail.TemplateName + ".txt", mail.Variables);
 				if (sender == null)
 				{
 					mail.Failed = true;

@@ -75,10 +75,13 @@
     <Compile Include="Fluent\Maybe.cs" />
     <Compile Include="Fluent\MonadExtensions.cs" />
     <Compile Include="Helpers\CompareValuesAttribute.cs" />
-    <Compile Include="Helpers\MailSender.cs" />
+    <Compile Include="Mail\Factories\MailSenderFactory.cs" />
+    <Compile Include="Mail\MailSender.cs" />
     <Compile Include="Helpers\NVelocityTemplateRepository.cs" />
     <Compile Include="Helpers\ParameterRebinder.cs" />
     <Compile Include="Helpers\ViewPageHelpers.cs" />
+    <Compile Include="Mail\IMailSender.cs" />
+    <Compile Include="Mail\Factories\IMailSenderFactory.cs" />
     <Compile Include="Mail\IMailStorage.cs" />
     <Compile Include="Mail\TemplateLocators\FileLocator.cs" />
     <Compile Include="Mail\TemplateLocators\IMailTemplateLocator.cs" />
