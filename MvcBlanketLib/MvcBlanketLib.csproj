@@ -80,8 +80,11 @@
     <Compile Include="Helpers\ParameterRebinder.cs" />
     <Compile Include="Helpers\ViewPageHelpers.cs" />
     <Compile Include="Mail\IMailStorage.cs" />
+    <Compile Include="Mail\TemplateLocators\FileLocator.cs" />
+    <Compile Include="Mail\TemplateLocators\MailTemplateLocatorBase.cs" />
     <Compile Include="Mail\Mail.cs" />
     <Compile Include="Mail\MailService.cs" />
+    <Compile Include="Mail\TemplateLocators\ResourceLocator.cs" />
     <Compile Include="ModelBinders\FlagBase.cs" />
     <Compile Include="ModelBinders\FlagStringAttribute.cs" />
     <Compile Include="ModelBinders\GroupEntityActionModelBinder.cs" />

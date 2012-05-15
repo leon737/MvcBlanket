@@ -14,18 +14,17 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
 using System.Net.Mail;
 using System.Reflection;
+using MvcBlanketLib.Mail.TemplateLocators;
 using MailMessage = System.Net.Mail.MailMessage;
 using System.Net;
-using System.Web;
-using System.Web.Hosting;
 
 namespace MvcBlanketLib.Helpers
 {
     public class MailSender
     {
+        public MailTemplateLocatorBase TemplateLocator { get; set; }
 
         string body;
 
@@ -34,49 +33,32 @@ namespace MvcBlanketLib.Helpers
         //TODO: (one with send invoke, other without, etc)
 
 
-        public static MailSender Create(Type t, string templatePath, IDictionary<string, object> data)
+        private void Initialize(IDictionary<string, object> data)
         {
-            MailSender sender = new MailSender();
             var repository = new NVelocityTemplateRepository(".");
-            var stream = Assembly.GetAssembly(t).GetManifestResourceStream(templatePath);
-            using (StreamReader sr = new StreamReader(stream))
-            {
-                string templateContent = sr.ReadToEnd();
-                sender.body = repository.RenderTemplateContent(templateContent, data);
-            }
+            body = repository.RenderTemplateContent(TemplateLocator.TemplateContent, data);
+        }
 
+        private static MailSender CreateInternal(MailTemplateLocatorBase templateLocator, IDictionary<string, object> data )
+        {
+            var sender = new MailSender {TemplateLocator = templateLocator};
+            sender.Initialize(data);
             return sender;
         }
 
-        public static MailSender Create(Assembly asm, string templatePath, IDictionary<string, object> data)
+        public static MailSender Create(Type assemblyType, string templatePath, IDictionary<string, object> data)
         {
-            MailSender sender = new MailSender();
-            var repository = new NVelocityTemplateRepository(".");
-            var stream = asm.GetManifestResourceStream(templatePath);
-            if (stream == null)
-                return null;
-            using (StreamReader sr = new StreamReader(stream))
-            {
-                string templateContent = sr.ReadToEnd();
-                sender.body = repository.RenderTemplateContent(templateContent, data);
-            }
+            return CreateInternal(new ResourceLocator(assemblyType, templatePath), data);
+        }
 
-            return sender;
+        public static MailSender Create(Assembly assembly, string templatePath, IDictionary<string, object> data)
+        {
+            return CreateInternal(new ResourceLocator(assembly, templatePath), data);
         }
 
         public static MailSender Create(string templatePath, IDictionary<string, object> data)
         {
-            MailSender sender = new MailSender();
-            var repository = new NVelocityTemplateRepository(".");
-            var fileName = HostingEnvironment.MapPath(templatePath);
-            string templateContent;
-            using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-            using (var sr = new StreamReader(fs))
-            {
-                templateContent = sr.ReadToEnd();
-            }
-            sender.body = repository.RenderTemplateContent(templateContent, data);
-            return sender;
+            return CreateInternal(new FileLocator(templatePath), data);
         }
 
 
