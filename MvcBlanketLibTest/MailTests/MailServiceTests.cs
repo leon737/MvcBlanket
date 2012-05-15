@@ -97,7 +97,7 @@ namespace MvcBlanketLibTest.MailTests
                                                                                 }
                                                                           : null)
                                                                           .Callback(() => calls++);
-            mailStorage.SetupGet(m => m.TemplatesDirectory).Returns("~/MailTests");
+            mailStorage.SetupGet(m => m.TemplatesPath).Returns("MvcBlanketLibTest.MailTests.");
             var storage = mailStorage.Object;
             var templateLocator = new ResourceLocator(this.GetType().Assembly);
             var mailService = MailService.Instance.RegisterStorage(storage).RegisterTemplateLocator(templateLocator);
