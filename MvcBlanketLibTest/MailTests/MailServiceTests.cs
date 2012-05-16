@@ -105,8 +105,12 @@ namespace MvcBlanketLibTest.MailTests
             var configuration = new Mock<IConfiguration>();
             configuration.SetupGet(m => m.Sender).Returns("sender@email.com");
             configuration.SetupGet(m => m.SmtpHost).Returns("127.0.0.1");
-            MailService.Instance.RegisterStorage(storage).RegisterTemplateLocator(templateLocator).RegisterMailSenderFactory(new MailSenderFactory()).RegisterConfiguration(configuration.Object);
-            MailService.Instance.ProcessQueue();
+            MailService.Instance
+                .RegisterStorage(storage)
+                .RegisterTemplateLocator(templateLocator)
+                .RegisterMailSenderFactory(new MailSenderFactory())
+                .RegisterConfiguration(configuration.Object)
+                .ProcessQueue();
             mailStorage.Verify(m => m.DeserializeMail(), Times.Exactly(2));
         }
     }
