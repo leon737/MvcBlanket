@@ -11,19 +11,13 @@ You should have received a copy of the GNU Lesser General Public License along w
 if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA 
 */
 
-using System.Collections.Generic;
-using MvcBlanketLib.Mail.Configuration;
-using MvcBlanketLib.Mail.TemplateLocators;
-
-namespace MvcBlanketLib.Mail.Factories
+namespace MvcBlanketLib.Mail.Configuration
 {
-    public class MailSenderFactory : IMailSenderFactory
+    public interface IConfiguration
     {
-        public IMailSender GetMailSender(IMailTemplateLocator templateLocator, IConfiguration configuration, string templatePath, IDictionary<string, object> data)
-        {
-            var sender = new MailSender { TemplateLocator = templateLocator, Configuration = configuration };
-            sender.Initialize(templatePath, data);
-            return sender;
-        }
+        string Sender { get; }
+        string SmtpHost { get;  }
+        string SmtpUser { get;  }
+        string SmtpPassword { get;  }
     }
 }

@@ -21,6 +21,7 @@ using MvcBlanketLib.Mail;
 using Moq;
 using MvcBlanketLib.Mail.Factories;
 using MvcBlanketLib.Mail.TemplateLocators;
+using MvcBlanketLib.Mail.Configuration;
 
 namespace MvcBlanketLibTest.MailTests
 {
@@ -101,7 +102,10 @@ namespace MvcBlanketLibTest.MailTests
             mailStorage.SetupGet(m => m.TemplatesPath).Returns("MvcBlanketLibTest.MailTests.");
             var storage = mailStorage.Object;
             var templateLocator = new ResourceLocator(this.GetType().Assembly);
-            var mailService = MailService.Instance.RegisterStorage(storage).RegisterTemplateLocator(templateLocator).RegisterMailSenderFactory(new MailSenderFactory());
+            var configuration = new Mock<IConfiguration>();
+            configuration.SetupGet(m => m.Sender).Returns("sender@email.com");
+            configuration.SetupGet(m => m.SmtpHost).Returns("127.0.0.1");
+            MailService.Instance.RegisterStorage(storage).RegisterTemplateLocator(templateLocator).RegisterMailSenderFactory(new MailSenderFactory()).RegisterConfiguration(configuration.Object);
             MailService.Instance.ProcessQueue();
             mailStorage.Verify(m => m.DeserializeMail(), Times.Exactly(2));
         }

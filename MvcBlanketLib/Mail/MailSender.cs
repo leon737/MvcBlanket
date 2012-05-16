@@ -13,9 +13,9 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Net.Mail;
 using MvcBlanketLib.Helpers;
+using MvcBlanketLib.Mail.Configuration;
 using MvcBlanketLib.Mail.TemplateLocators;
 using System.Net;
 
@@ -24,6 +24,8 @@ namespace MvcBlanketLib.Mail
     public class MailSender : IMailSender
     {
         public IMailTemplateLocator TemplateLocator { get; set; }
+
+        public IConfiguration Configuration { get; set; }
 
         string body;
 
@@ -35,10 +37,10 @@ namespace MvcBlanketLib.Mail
 
         public void Send(string subject, string recipient)
         {
-            string sender = ConfigurationManager.AppSettings["MailSenderEmail"];
-            string smtpHost = ConfigurationManager.AppSettings["SmtpHost"];
-            string smtpUser = ConfigurationManager.AppSettings["SmtpUser"];
-            string smtpPassword = ConfigurationManager.AppSettings["SmtpPassword"];
+            string sender = Configuration.Sender;
+            string smtpHost = Configuration.SmtpHost;
+            string smtpUser = Configuration.SmtpUser;
+            string smtpPassword = Configuration.SmtpPassword;
             var client = new SmtpClient(smtpHost);
             if (!string.IsNullOrWhiteSpace(smtpUser))
             {

@@ -75,6 +75,8 @@
     <Compile Include="Fluent\Maybe.cs" />
     <Compile Include="Fluent\MonadExtensions.cs" />
     <Compile Include="Helpers\CompareValuesAttribute.cs" />
+    <Compile Include="Mail\Configuration\IConfiguration.cs" />
+    <Compile Include="Mail\Configuration\WebConfiguration.cs" />
     <Compile Include="Mail\Factories\MailSenderFactory.cs" />
     <Compile Include="Mail\MailSender.cs" />
     <Compile Include="Helpers\NVelocityTemplateRepository.cs" />

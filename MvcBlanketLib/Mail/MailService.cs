@@ -13,6 +13,7 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 
 using System.Net.Mail;
 using System.Configuration;
+using MvcBlanketLib.Mail.Configuration;
 using MvcBlanketLib.Mail.Factories;
 using MvcBlanketLib.Mail.TemplateLocators;
 
@@ -33,6 +34,7 @@ namespace MvcBlanketLib.Mail
         private IMailTemplateLocator templateLocator;
 		private IMailStorage storage;
 	    private IMailSenderFactory factory;
+	    private IConfiguration configuration;
 
 		public static MailService Instance
 		{
@@ -62,6 +64,12 @@ namespace MvcBlanketLib.Mail
             return this;
         }
 
+        public MailService RegisterConfiguration(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+            return this;
+        }
+
 // ReSharper restore ParameterHidesMember
 
         public Mail RegisterMail(string recipientEmail, string templateName)
@@ -74,12 +82,12 @@ namespace MvcBlanketLib.Mail
 
 		public void ProcessQueue()
 		{
-			if (storage == null || templateLocator == null || factory == null) return;
+			if (storage == null || templateLocator == null || factory == null || configuration == null) return;
 			for (; ; )
 			{
 				var mail = storage.DeserializeMail();
 				if (mail == null) return;
-				var sender =  factory.GetMailSender(templateLocator, storage.TemplatesPath + mail.TemplateName + ".txt", mail.Variables);
+				var sender =  factory.GetMailSender(templateLocator, configuration, storage.TemplatesPath + mail.TemplateName + ".txt", mail.Variables);
 				if (sender == null)
 				{
 					mail.Failed = true;

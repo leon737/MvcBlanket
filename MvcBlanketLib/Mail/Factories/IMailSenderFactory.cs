@@ -12,13 +12,14 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 */
 
 using System.Collections.Generic;
+using MvcBlanketLib.Mail.Configuration;
 using MvcBlanketLib.Mail.TemplateLocators;
 
 namespace MvcBlanketLib.Mail.Factories
 {
     public interface IMailSenderFactory
     {
-        IMailSender GetMailSender(IMailTemplateLocator templateLocator, string templatePath, IDictionary<string, object> data);
+        IMailSender GetMailSender(IMailTemplateLocator templateLocator, IConfiguration configuration, string templatePath, IDictionary<string, object> data);
 
     }
 }
