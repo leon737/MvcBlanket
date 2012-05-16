@@ -59,9 +59,6 @@
     <Compile Include="ActionFilters\NavigatedAttribute.cs" />
     <Compile Include="ActionFilters\SelectFilterAttribute.cs" />
     <Compile Include="ActionFilters\SortMappingAttribute.cs" />
-    <Compile Include="BackgroundTasks\BackgroundTask.cs" />
-    <Compile Include="BackgroundTasks\BackgroundTasksManager.cs" />
-    <Compile Include="BackgroundTasks\BackgroundTasksManagerSettings.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\ExpressionExtensions.cs" />
     <Compile Include="Extensions\HtmlExtensions.cs" />
@@ -110,6 +107,9 @@
     <Compile Include="ResumingActionResult\ResumingFilePathResult.cs" />
     <Compile Include="ResumingActionResult\ResumingFileStreamResult.cs" />
     <Compile Include="ResumingActionResult\ResumingRequest.cs" />
+    <Compile Include="Schedule\ScheduledTask.cs" />
+    <Compile Include="Schedule\Scheduler.cs" />
+    <Compile Include="Schedule\SchedulerSettings.cs" />
     <Compile Include="TypeConverters\PageFilterTypeConverter.cs" />
     <Compile Include="TypeConverters\UninitializePageFilterTypeActivator.cs" />
     <Compile Include="ViewModels\PagedViewModel.cs" />

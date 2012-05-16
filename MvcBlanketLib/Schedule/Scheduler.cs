@@ -13,34 +13,32 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Diagnostics;
 
-namespace MvcBlanketLib.BackgroundTasks
+namespace MvcBlanketLib.Schedule
 {
-	public class BackgroundTasksManager
+	public class Scheduler
 	{
-		private static BackgroundTasksManager instance;
-		public IList<BackgroundTask> Tasks { get; private set; }
-		public BackgroundTasksManagerSettings Settings { get; private set; }
+		private static Scheduler instance;
+		public IList<ScheduledTask> Tasks { get; private set; }
+		public SchedulerSettings Settings { get; private set; }
 		private Timer timer;
 
-		private BackgroundTasksManager(BackgroundTasksManagerSettings settings)
+        private Scheduler(SchedulerSettings settings)
 		{
 			Settings = settings;
-			Tasks = new List<BackgroundTask>();
+            Tasks = new List<ScheduledTask>();
 			Initialize();
 		}
 
-		public static BackgroundTasksManager Create(BackgroundTasksManagerSettings settings)
+        public static Scheduler Create(SchedulerSettings settings)
 		{
-			instance = new BackgroundTasksManager(settings);
+            instance = new Scheduler(settings);
 			return instance;
 		}
 
-		public static BackgroundTasksManager Instance
+        public static Scheduler Instance
 		{
 			get { return instance; }
 		}

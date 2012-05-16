@@ -12,14 +12,36 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace MvcBlanketLib.BackgroundTasks
+namespace MvcBlanketLib.Schedule
 {
-	public class BackgroundTasksManagerSettings
+	public class ScheduledTask
 	{
-		public int PoolingInterval { get; set; }
+		public Action TaskAction { get; set; }
+		private int interval;
+		public int Interval { get { return interval; } set { interval = value; ResetTicks(); } }
+
+		private int remainingTicks;
+
+        public ScheduledTask()
+		{
+			ResetTicks();
+		}
+
+		void ResetTicks ()
+		{
+			remainingTicks = Interval;
+		}
+
+		public bool CheckInterval()
+		{
+			remainingTicks--;
+			if (remainingTicks == 0)
+			{
+				ResetTicks();
+				return true;
+			}
+			return false;
+		}
 	}
 }
