@@ -12,8 +12,6 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 */
 
 using System;
-using System.Reflection;
-using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -33,12 +31,23 @@ namespace MvcBlanketLibTest.MailTests
         const string TemplateName = "TestTemplate";
 
         private readonly Mock<IMailStorage> mailStorage = new Mock<IMailStorage>();
+        private readonly IMailTemplateLocator templateLocator;
+        private readonly Mock<IConfiguration> configuration;
+
+        public MailServiceTests()
+        {
+            templateLocator = new ResourceLocator(GetType().Assembly);
+            configuration = new Mock<IConfiguration>();
+            configuration.SetupGet(m => m.Sender).Returns("sender@email.com");
+            configuration.SetupGet(m => m.SmtpHost).Returns("127.0.0.1");
+        }
+
+
 
         [TestMethod]
         public void TestRegisterMail()
         {
             var storage = mailStorage.Object;
-            var templateLocator = new ResourceLocator(this.GetType().Assembly);
             var mailService = MailService.Instance.RegisterStorage(storage).RegisterTemplateLocator(templateLocator);
             var mail = mailService.RegisterMail(RecipientEmail, TemplateName);
             Assert.IsNotNull(mail);
@@ -48,7 +57,6 @@ namespace MvcBlanketLibTest.MailTests
         public void TestAddVariableToMail()
         {
             var storage = mailStorage.Object;
-            var templateLocator = new ResourceLocator(this.GetType().Assembly);
             var mailService = MailService.Instance.RegisterStorage(storage).RegisterTemplateLocator(templateLocator);
             var mail = mailService.RegisterMail(RecipientEmail, TemplateName);
             mail.AddVariable("StringVariable", "StringValue").AddVariable("IntVariable", 10).AddVariable(
@@ -65,7 +73,6 @@ namespace MvcBlanketLibTest.MailTests
         public void TestSaveMailToPipeline()
         {
             var storage = mailStorage.Object;
-            var templateLocator = new ResourceLocator(this.GetType().Assembly);
             var mailService = MailService.Instance.RegisterStorage(storage).RegisterTemplateLocator(templateLocator);
             var mail = mailService.RegisterMail(RecipientEmail, TemplateName);
             mail.AddVariable("StringVariable", "StringValue").AddVariable("IntVariable", 10).AddVariable(
@@ -77,18 +84,22 @@ namespace MvcBlanketLibTest.MailTests
         public void TestMailServiceProcessEmptyMailQueue()
         {
             var storage = mailStorage.Object;
-            var templateLocator = new ResourceLocator(this.GetType().Assembly);
-            var mailService = MailService.Instance.RegisterStorage(storage).RegisterTemplateLocator(templateLocator);
-            MailService.Instance.ProcessQueue();
-            mailStorage.Verify(m => m.DeserializeMail());
+            MailService.Instance
+                .RegisterStorage(storage)
+                .RegisterTemplateLocator(templateLocator)
+                .RegisterConfiguration(configuration.Object)
+                .ProcessQueue();
+            mailStorage.Verify(m => m.DeserializeMail(), Times.Once());
         }
 
         [TestMethod]
         public void TestMailServiceProcessMailQueueWithOneMail()
         {
             var calls = 0;
+// ReSharper disable AccessToModifiedClosure
             mailStorage.Setup(m => m.DeserializeMail()).Returns(() => calls == 0
-                                                                          ? new Mail()
+// ReSharper restore AccessToModifiedClosure
+                                                                          ? new Mail
                                                                                 {
                                                                                     RecipientEmail = RecipientEmail,
                                                                                     TemplateName = TemplateName,
@@ -101,10 +112,6 @@ namespace MvcBlanketLibTest.MailTests
                                                                           .Callback(() => calls++);
             mailStorage.SetupGet(m => m.TemplatesPath).Returns("MvcBlanketLibTest.MailTests.");
             var storage = mailStorage.Object;
-            var templateLocator = new ResourceLocator(this.GetType().Assembly);
-            var configuration = new Mock<IConfiguration>();
-            configuration.SetupGet(m => m.Sender).Returns("sender@email.com");
-            configuration.SetupGet(m => m.SmtpHost).Returns("127.0.0.1");
             MailService.Instance
                 .RegisterStorage(storage)
                 .RegisterTemplateLocator(templateLocator)
