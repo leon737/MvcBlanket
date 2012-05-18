@@ -59,6 +59,7 @@ namespace MvcBlanketLib.Schedule
         DateTime StartTime { get; set; }
 
         IntervalTypes IntervalType { get; set; }
+
     }
 
     public enum IntervalTypes

@@ -13,62 +13,95 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Diagnostics;
+using System.Linq;
 
 namespace MvcBlanketLib.Schedule
 {
-	public class Scheduler
-	{
-		private static Scheduler instance;
-	    private IList<IScheduledTask> tasks;
-	    private SchedulerSettings settings;
+    public class Scheduler
+    {
+        private static Scheduler instance;
+        private IList<ScheduledTaskInternal> tasks;
 
-        private Scheduler(SchedulerSettings settings)
-		{
-			this.settings = settings;
-            tasks = new List<IScheduledTask>();
-			Initialize();
-		}
+        private Scheduler()
+        {
+            tasks = new List<ScheduledTaskInternal>();
+            Initialize();
+        }
 
         public static Scheduler Create(SchedulerSettings settings)
-		{
-            instance = new Scheduler(settings);
-			return instance;
-		}
+        {
+            instance = new Scheduler();
+            return instance;
+        }
 
         public static Scheduler Instance
-		{
-			get { return instance; }
-		}
+        {
+            get { return instance; }
+        }
 
-		void Initialize()
-		{
+        void Initialize()
+        {
             //timer = new Timer(TimerCb, null, 1000, Settings.PoolingInterval);
-		}
+        }
 
         public void AddTask(IScheduledTask task)
         {
-            
+            if (task.TaskAction == null) throw new ArgumentException("Task action cannot be null", "task");
+            if (tasks.Any(t => t.Task == task)) throw new ArgumentException("Cannot add duplicated task", "task");
+            tasks.Add(new ScheduledTaskInternal { Task = task, NextTimeToRun = GetNextTimeToRun(task) });
+        }
+
+        private DateTime GetNextTimeToRun(IScheduledTask task)
+        {
+            switch (task.IntervalType)
+            {
+                case IntervalTypes.Never:
+                case IntervalTypes.Once:
+                    return task.StartTime;
+                case IntervalTypes.Periodic:
+                    return task.StartTime < DateTime.UtcNow - task.Interval ? DateTime.UtcNow + task.Interval : (task.StartTime < DateTime.UtcNow ? task.StartTime + task.Interval : task.StartTime);
+                default:
+                    throw new ArgumentException("Invalid interval type given", "task");
+            }
         }
 
         public void RemoveTask(IScheduledTask task)
         {
-            throw new NotImplementedException();
+            if (!tasks.Any(t => t.Task == task)) throw new ArgumentException("Cannot find specified task to delete", "task");
+            var taskToRemove = tasks.First(t => t.Task == task);
+            tasks.Remove(taskToRemove);
         }
 
         public void RemoveDeprecatedTasks()
         {
-            throw new NotImplementedException();
+            tasks = FutureTasks.ToList();
         }
 
-	    public IEnumerable<IScheduledTask> Tasks
-	    {
-	        get
-	        {
-	            throw new NotImplementedException();
-	        }
-	    }
+        public IEnumerable<IScheduledTask> Tasks
+        {
+            get { return tasks.Select(t => t.Task); }
+        }
+
+        internal IEnumerable<ScheduledTaskInternal> FutureTasks
+        {
+            get
+            {
+                return tasks.Where(
+                    t =>
+                    t.Task.IntervalType == IntervalTypes.Periodic ||
+                    (t.Task.IntervalType == IntervalTypes.Once && t.Task.StartTime > DateTime.UtcNow));
+            }
+        }
+
+        internal DateTime? NextTimeToRun
+        {
+            get
+            {
+                if (!FutureTasks.Any()) return null;
+                return FutureTasks.OrderBy(t => t.NextTimeToRun).Select(t => t.NextTimeToRun).First();
+            }
+        }
+
 
         //private void TimerCb(object state)
         //{
@@ -93,9 +126,9 @@ namespace MvcBlanketLib.Schedule
         //            }
         //        }
         //    }
-		//}
+        //}
 
-	}
+    }
 
 
 }

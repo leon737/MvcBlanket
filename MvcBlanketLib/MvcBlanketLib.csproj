@@ -108,6 +108,7 @@
     <Compile Include="ResumingActionResult\ResumingFileStreamResult.cs" />
     <Compile Include="ResumingActionResult\ResumingRequest.cs" />
     <Compile Include="Schedule\ScheduledTask.cs" />
+    <Compile Include="Schedule\ScheduledTaskInternal.cs" />
     <Compile Include="Schedule\Scheduler.cs" />
     <Compile Include="Schedule\SchedulerSettings.cs" />
     <Compile Include="TypeConverters\PageFilterTypeConverter.cs" />
