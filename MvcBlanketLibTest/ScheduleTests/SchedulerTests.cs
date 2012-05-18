@@ -12,7 +12,9 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcBlanketLib.Schedule;
 
@@ -21,7 +23,7 @@ namespace MvcBlanketLibTest.ScheduleTests
     [TestClass]
     public class SchedulerTests
     {
-       
+
         [TestMethod]
         public void CreateInstanceTest()
         {
@@ -211,6 +213,51 @@ namespace MvcBlanketLibTest.ScheduleTests
                 });
             var nextTimeToRun = scheduler.NextTimeToRun;
             Assert.IsNull(nextTimeToRun);
+        }
+
+        [TestMethod]
+        public void TestPeriodicTaskCall5Times()
+        {
+            DateTime prevRun = DateTime.UtcNow;
+            List<TimeSpan> intervals = new List<TimeSpan>();
+            int calls = 0;
+            var scheduler = CreateScheduler();
+            scheduler.AddTask(
+                new ScheduledTask
+                {
+                    TaskAction = () =>
+                    {
+                        calls++;
+                        TimeSpan interval = DateTime.UtcNow - prevRun;
+                        prevRun = DateTime.UtcNow;
+                        intervals.Add(interval);
+                    },
+                    IntervalType = IntervalTypes.Periodic,
+                    Interval = TimeSpan.FromMilliseconds(100)
+                });
+            Thread.Sleep(600);
+            double averageInterval = intervals.Average(s => s.TotalMilliseconds);
+            if (Math.Abs(100 - averageInterval) > 10) Assert.Fail("Average interval is " + averageInterval);
+        }
+
+        [TestMethod]
+        public void TestOnceTaskCall()
+        {
+            DateTime callWasMade = DateTime.MinValue;
+            DateTime startTime = DateTime.UtcNow.AddSeconds(1);
+            var scheduler = CreateScheduler();
+            scheduler.AddTask(
+                new ScheduledTask
+                {
+                    TaskAction = () =>
+                                     {
+                                         callWasMade = DateTime.UtcNow;
+                                     },
+                    IntervalType = IntervalTypes.Once,
+                    StartTime = startTime
+                });
+            Thread.Sleep(1500);
+            if (Math.Abs((startTime - callWasMade).TotalMilliseconds) > 10) Assert.Fail("Call was made at wrong time");
         }
 
     }

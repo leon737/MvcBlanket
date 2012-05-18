@@ -13,14 +13,20 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MvcBlanketLib.Schedule
 {
     public class Scheduler
     {
+        private const int Jitter = 100;
         private static Scheduler instance;
         private IList<ScheduledTaskInternal> tasks;
+        private Timer timer;
+        private DateTime timerWillFire;
 
         private Scheduler()
         {
@@ -41,14 +47,32 @@ namespace MvcBlanketLib.Schedule
 
         void Initialize()
         {
-            //timer = new Timer(TimerCb, null, 1000, Settings.PoolingInterval);
+            timerWillFire = DateTime.MaxValue;
         }
 
         public void AddTask(IScheduledTask task)
         {
             if (task.TaskAction == null) throw new ArgumentException("Task action cannot be null", "task");
             if (tasks.Any(t => t.Task == task)) throw new ArgumentException("Cannot add duplicated task", "task");
-            tasks.Add(new ScheduledTaskInternal { Task = task, NextTimeToRun = GetNextTimeToRun(task) });
+            tasks.Add(new ScheduledTaskInternal { Task = task, NextTimeToRun = GetNextTimeToRun(task), Enabled = true });
+            UpdateTimer();
+        }
+
+        private void UpdateTimer()
+        {
+            var nextTimeToRun = NextTimeToRun;
+            if (nextTimeToRun == null) return;
+            Debug.WriteLine("TWF: {0}  NTTR: {1}", timerWillFire.ToString("mm:ss:fff"), nextTimeToRun.Value.ToString("mm:ss:fff"));
+            if (timerWillFire > nextTimeToRun.Value)
+            {
+                timerWillFire = nextTimeToRun.Value;
+                if (timer != null)
+                    timer.Dispose();
+                TimeSpan runInterval = nextTimeToRun.Value - DateTime.UtcNow;
+                Debug.WriteLine("RI: {0}", runInterval.TotalMilliseconds);
+                if (runInterval < TimeSpan.Zero) runInterval = TimeSpan.Zero;
+                timer = new Timer(TimerCb, null, runInterval, TimeSpan.Zero);
+            }
         }
 
         private DateTime GetNextTimeToRun(IScheduledTask task)
@@ -59,7 +83,7 @@ namespace MvcBlanketLib.Schedule
                 case IntervalTypes.Once:
                     return task.StartTime;
                 case IntervalTypes.Periodic:
-                    return task.StartTime < DateTime.UtcNow - task.Interval ? DateTime.UtcNow + task.Interval : (task.StartTime < DateTime.UtcNow ? task.StartTime + task.Interval : task.StartTime);
+                    return task.StartTime < DateTime.UtcNow - task.Interval ? DateTime.UtcNow + task.Interval : (task.StartTime <= DateTime.UtcNow ? task.StartTime + task.Interval : task.StartTime);
                 default:
                     throw new ArgumentException("Invalid interval type given", "task");
             }
@@ -87,9 +111,9 @@ namespace MvcBlanketLib.Schedule
             get
             {
                 return tasks.Where(
-                    t =>
+                    t => t.Enabled && (
                     t.Task.IntervalType == IntervalTypes.Periodic ||
-                    (t.Task.IntervalType == IntervalTypes.Once && t.Task.StartTime > DateTime.UtcNow));
+                    (t.Task.IntervalType == IntervalTypes.Once && t.Task.StartTime > DateTime.UtcNow)));
             }
         }
 
@@ -102,6 +126,38 @@ namespace MvcBlanketLib.Schedule
             }
         }
 
+        private void TimerCb(object state)
+        {
+            var tasksToRun = TasksToRun;
+            foreach (var task in tasksToRun)
+            {
+                ScheduledTaskInternal task1 = task;
+                Task.Factory.StartNew(() => task1.Task.TaskAction());
+                if (task.Task.IntervalType == IntervalTypes.Once)
+                    task.Enabled = false;
+                if (task.Task.IntervalType == IntervalTypes.Periodic)
+                {
+                    task.NextTimeToRun += task.Task.Interval;
+                    Debug.WriteLine("Periodic NTTR {0:mm:ss:fff}", task.NextTimeToRun);
+                }
+            }
+            timerWillFire = DateTime.MaxValue;
+            UpdateTimer();
+        }
+
+        internal IEnumerable<ScheduledTaskInternal> TasksToRun
+        {
+            get
+            {
+                var possibleTasks =
+                    tasks.Where(
+                        (t => t.Enabled && (
+                            (t.Task.IntervalType == IntervalTypes.Once && t.NextTimeToRun <= DateTime.UtcNow) ||
+                              (t.Task.IntervalType == IntervalTypes.Periodic &&
+                               Math.Abs((t.NextTimeToRun - DateTime.UtcNow).TotalMilliseconds) < Jitter))));
+                return possibleTasks;
+            }
+        }
 
         //private void TimerCb(object state)
         //{

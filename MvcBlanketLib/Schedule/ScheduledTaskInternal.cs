@@ -20,5 +20,7 @@ namespace MvcBlanketLib.Schedule
         public IScheduledTask Task { get; set; }
 
         public DateTime NextTimeToRun { get; set; }
+
+        public bool Enabled { get; set; }
     }
 }
