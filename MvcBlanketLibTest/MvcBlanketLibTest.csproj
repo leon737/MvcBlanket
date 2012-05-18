@@ -73,6 +73,7 @@
     <Compile Include="ModelBindersTests\GroupEntityActionModelBinderTests.cs" />
     <Compile Include="PageFilterTypeConverterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScheduleTests\SchedulerTests.cs" />
     <Compile Include="SortExtensionsTest.cs" />
     <Compile Include="ViewModelTests\FakeEntity.cs" />
     <Compile Include="ViewModelTests\FakeFiltersModel.cs" />

@@ -21,14 +21,13 @@ namespace MvcBlanketLib.Schedule
 	public class Scheduler
 	{
 		private static Scheduler instance;
-		public IList<ScheduledTask> Tasks { get; private set; }
-		public SchedulerSettings Settings { get; private set; }
-		private Timer timer;
+	    private IList<IScheduledTask> tasks;
+	    private SchedulerSettings settings;
 
         private Scheduler(SchedulerSettings settings)
 		{
-			Settings = settings;
-            Tasks = new List<ScheduledTask>();
+			this.settings = settings;
+            tasks = new List<IScheduledTask>();
 			Initialize();
 		}
 
@@ -45,33 +44,56 @@ namespace MvcBlanketLib.Schedule
 
 		void Initialize()
 		{
-			timer = new Timer(TimerCb, null, 1000, Settings.PoolingInterval);
+            //timer = new Timer(TimerCb, null, 1000, Settings.PoolingInterval);
 		}
 
-		private void TimerCb(object state)
-		{
-			foreach (var backgroundTask in Tasks)
-			{
-				if (backgroundTask.CheckInterval())
-				{
-					try
-					{
-						if (Monitor.TryEnter(backgroundTask))
-							backgroundTask.TaskAction();
-					}
-					catch (Exception ex)
-					{
-						var log = new EventLog();
-						log.Source = "Application";
-						log.WriteEntry(ex.ToString(), EventLogEntryType.Error);
-					}
-					finally
-					{
-						Monitor.Exit(backgroundTask);
-					}
-				}
-			}
-		}
+        public void AddTask(IScheduledTask task)
+        {
+            
+        }
+
+        public void RemoveTask(IScheduledTask task)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveDeprecatedTasks()
+        {
+            throw new NotImplementedException();
+        }
+
+	    public IEnumerable<IScheduledTask> Tasks
+	    {
+	        get
+	        {
+	            throw new NotImplementedException();
+	        }
+	    }
+
+        //private void TimerCb(object state)
+        //{
+        //    foreach (var backgroundTask in Tasks)
+        //    {
+        //        if (backgroundTask.CheckInterval())
+        //        {
+        //            try
+        //            {
+        //                if (Monitor.TryEnter(backgroundTask))
+        //                    backgroundTask.TaskAction();
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                var log = new EventLog();
+        //                log.Source = "Application";
+        //                log.WriteEntry(ex.ToString(), EventLogEntryType.Error);
+        //            }
+        //            finally
+        //            {
+        //                Monitor.Exit(backgroundTask);
+        //            }
+        //        }
+        //    }
+		//}
 
 	}
 
