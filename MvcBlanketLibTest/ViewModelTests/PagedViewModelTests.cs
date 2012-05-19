@@ -11,9 +11,6 @@ You should have received a copy of the GNU Lesser General Public License along w
 if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA 
 */
 
-using System;
-using System.Text;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -21,31 +18,29 @@ using MvcBlanketLib.ViewModels;
 using MvcContrib.Sorting;
 using MvcContrib.UI.Grid;
 
-namespace MvcBlanketLibTest
+namespace MvcBlanketLibTest.ViewModelTests
 {
     [TestClass]
-    public class PagedViewModelTest
+    public class PagedViewModelTests
     {
-
         private class MockEntity
         {
             public int IntProp { get; set; }
             public string StringProp { get; set; }
         }
 
-        private IQueryable<MockEntity> MockRepositoryMethod ()
+        private IQueryable<MockEntity> MockRepositoryMethod()
         {
-            return new[]
-                   {new MockEntity { IntProp = 10, StringProp = "BBB"}, new MockEntity { IntProp = 10, StringProp = "AAA"}, new MockEntity { IntProp = 20, StringProp = "CCC"}}
+            return new[] { new MockEntity { IntProp = 10, StringProp = "BBB" }, new MockEntity { IntProp = 10, StringProp = "AAA" }, new MockEntity { IntProp = 20, StringProp = "CCC" } }
                    .AsQueryable();
         }
 
-        
+
         [TestMethod]
         public void SetupWithNullParameterReturnsSameSequence()
         {
             var query = MockRepositoryMethod();
-            var model = new PagedViewModel<MockEntity> {Query = MockRepositoryMethod(), GridSortOptions = new GridSortOptions{ Column = "IntProp", Direction = SortDirection.Descending}}.Setup();
+            var model = new PagedViewModel<MockEntity> { Query = MockRepositoryMethod(), GridSortOptions = new GridSortOptions { Column = "IntProp", Direction = SortDirection.Descending } }.Setup();
             Assert.IsTrue(model.PagedList.Count() == query.Count());
             Assert.AreEqual(query.First().IntProp, model.PagedList.Last().IntProp);
         }
@@ -54,7 +49,7 @@ namespace MvcBlanketLibTest
         public void SetupWithOneParameterReturnsOrderedSequence()
         {
             var query = MockRepositoryMethod();
-            var model = new PagedViewModel<MockEntity> { Query = MockRepositoryMethod(), GridSortOptions = new GridSortOptions{ Direction = SortDirection.Descending}}.Setup(m => m.IntProp);
+            var model = new PagedViewModel<MockEntity> { Query = MockRepositoryMethod(), GridSortOptions = new GridSortOptions { Direction = SortDirection.Descending } }.Setup(m => m.IntProp);
             Assert.IsTrue(model.PagedList.Count() == query.Count());
             Assert.AreEqual(query.First().IntProp, model.PagedList.Last().IntProp);
         }
@@ -80,7 +75,7 @@ namespace MvcBlanketLibTest
         }
 
         [TestMethod]
-        public void ConstructPageViewModelWithApplyMethodResult ()
+        public void ConstructPageViewModelWithApplyMethodResult()
         {
             var query = MockRepositoryMethod();
             var viewData = new ViewDataDictionary();
@@ -91,4 +86,7 @@ namespace MvcBlanketLibTest
             Assert.AreEqual(query.Count(), model.PagedList.Count());
         }
     }
+
+
+
 }

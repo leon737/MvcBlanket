@@ -11,17 +11,30 @@ You should have received a copy of the GNU Lesser General Public License along w
 if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA 
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Configuration;
 
-namespace MvcBlanketLib.Mail
+namespace MvcBlanketLib.Mail.Configuration
 {
-    public interface IMailStorage
+    public class WebConfiguration : IConfiguration
     {
-        void SerializeMail(Mail mail);
-        Mail DeserializeMail();
-        string TemplatesPath { get; }
+        public string Sender
+        {
+            get { return ConfigurationManager.AppSettings["MailSenderEmail"]; }
+        }
+
+        public string SmtpHost
+        {
+            get { return ConfigurationManager.AppSettings["SmtpHost"]; }
+        }
+
+        public string SmtpUser
+        {
+            get { return ConfigurationManager.AppSettings["SmtpUser"]; }
+        }
+
+        public string SmtpPassword
+        {
+            get { return ConfigurationManager.AppSettings["SmtpPassword"]; }
+        }
     }
 }

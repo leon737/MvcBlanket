@@ -12,16 +12,36 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace MvcBlanketLib.Mail
+namespace MvcBlanketLib.Schedule
 {
-    public interface IMailStorage
+    public class ScheduledTask : IScheduledTask
     {
-        void SerializeMail(Mail mail);
-        Mail DeserializeMail();
-        string TemplatesPath { get; }
+        public Action TaskAction { get; set; }
+        public TimeSpan Interval { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
+        public IntervalTypes IntervalType { get; set; }        
+    }
+
+    public interface IScheduledTask
+    {
+        Action TaskAction { get; set; }
+
+        TimeSpan Interval { get; set; }
+
+        DateTime StartTime { get; set; }
+
+        DateTime? EndTime { get; set; }
+
+        IntervalTypes IntervalType { get; set; }
+
+    }
+
+    public enum IntervalTypes
+    {
+        Never,
+        Once,
+        Periodic
     }
 }

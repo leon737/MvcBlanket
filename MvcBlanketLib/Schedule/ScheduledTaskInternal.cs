@@ -12,16 +12,15 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace MvcBlanketLib.Mail
+namespace MvcBlanketLib.Schedule
 {
-    public interface IMailStorage
+    internal class ScheduledTaskInternal
     {
-        void SerializeMail(Mail mail);
-        Mail DeserializeMail();
-        string TemplatesPath { get; }
+        public IScheduledTask Task { get; set; }
+
+        public DateTime NextTimeToRun { get; set; }
+
+        public bool Enabled { get; set; }
     }
 }

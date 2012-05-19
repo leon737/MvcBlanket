@@ -12,14 +12,18 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using MvcBlanketLib.PageFilters;
 
-namespace MvcBlanketLib.BackgroundTasks
+namespace MvcBlanketLibTest.ViewModelTests
 {
-	public class BackgroundTasksManagerSettings
-	{
-		public int PoolingInterval { get; set; }
-	}
+    public class FakeFiltersModel : IPageFiltersModel
+    {
+        public PageFilter<string> Title { get; set; }
+
+        public PageFilter<decimal> Price { get; set; }
+
+        public PageFilter<bool> Status { get; set; }
+
+        public PageFilter<IRange<DateTime>> Published { get; set; }
+    }
 }

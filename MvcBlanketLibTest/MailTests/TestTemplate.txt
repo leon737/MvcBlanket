@@ -1,4 +1,7 @@
-﻿/*
+﻿TEST MAIL TEMPLATE
+
+--SPLITTER--
+
 MVC Blanket Library Copyright (C) 2009-2012 Leonid Gordo
 
 This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; 
@@ -9,19 +12,3 @@ See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with this library; 
 if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA 
-*/
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace MvcBlanketLib.Mail
-{
-    public interface IMailStorage
-    {
-        void SerializeMail(Mail mail);
-        Mail DeserializeMail();
-        string TemplatesPath { get; }
-    }
-}

@@ -12,16 +12,19 @@ if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace MvcBlanketLib.Mail
+namespace MvcBlanketLibTest.ViewModelTests
 {
-    public interface IMailStorage
+    public class FakeEntity
     {
-        void SerializeMail(Mail mail);
-        Mail DeserializeMail();
-        string TemplatesPath { get; }
+        public int Id { get; set; }
+
+        public string Title { get; set; }
+
+        public decimal Price { get; set; }
+
+        public bool Status { get; set; }
+
+        public DateTime Published { get; set; }
     }
 }

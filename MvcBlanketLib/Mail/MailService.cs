@@ -11,11 +11,11 @@ You should have received a copy of the GNU Lesser General Public License along w
 if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA 
 */
 
-using MvcBlanketLib.Helpers;
-using System.Reflection;
 using System.Net.Mail;
-using System.Web;
 using System.Configuration;
+using MvcBlanketLib.Mail.Configuration;
+using MvcBlanketLib.Mail.Factories;
+using MvcBlanketLib.Mail.TemplateLocators;
 
 namespace MvcBlanketLib.Mail
 {
@@ -26,17 +26,15 @@ namespace MvcBlanketLib.Mail
 
 		}
 
-		static MailService instance = new MailService();
-		IMailStorage storage;
-		Assembly asm;
 
-		public Mail RegisterMail(string recipientEmail, string templateName)
-		{
-			if (storage == null) return null;
-			var mail = new Mail { Storage = storage, RecipientEmail = recipientEmail, TemplateName = templateName };
-			mail.AddVariable("Domain", ConfigurationManager.AppSettings["Domain"]);
-			return mail;
-		}
+// ReSharper disable InconsistentNaming
+		static readonly MailService instance = new MailService();
+// ReSharper restore InconsistentNaming
+
+        private IMailTemplateLocator templateLocator;
+		private IMailStorage storage;
+	    private IMailSenderFactory factory;
+	    private IConfiguration configuration;
 
 		public static MailService Instance
 		{
@@ -46,26 +44,50 @@ namespace MvcBlanketLib.Mail
 			}
 		}
 
+
+// ReSharper disable ParameterHidesMember
+        public MailService RegisterTemplateLocator(IMailTemplateLocator templateLocator)
+        {
+            this.templateLocator = templateLocator;
+            return this;
+        }
+
 		public MailService RegisterStorage(IMailStorage storage)
 		{
 			this.storage = storage;
 			return this;
 		}
 
-		public MailService RegisterAssembly(Assembly asm)
-		{
-			this.asm = asm;
-			return this;
-		}
+        public MailService RegisterMailSenderFactory(IMailSenderFactory factory)
+        {
+            this.factory = factory;
+            return this;
+        }
+
+        public MailService RegisterConfiguration(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+            return this;
+        }
+
+// ReSharper restore ParameterHidesMember
+
+        public Mail RegisterMail(string recipientEmail, string templateName)
+        {
+            if (storage == null) return null;
+            var mail = new Mail { Storage = storage, RecipientEmail = recipientEmail, TemplateName = templateName };
+            mail.AddVariable("Domain", ConfigurationManager.AppSettings["Domain"]);
+            return mail;
+        }
 
 		public void ProcessQueue()
 		{
-			if (storage == null || asm == null) return;
+			if (storage == null || templateLocator == null || factory == null || configuration == null) return;
 			for (; ; )
 			{
 				var mail = storage.DeserializeMail();
 				if (mail == null) return;
-				var sender = MailSender.Create(storage.TemplatesDirectory + "/" + mail.TemplateName + ".txt", mail.Variables);
+				var sender =  factory.GetMailSender(templateLocator, configuration, storage.TemplatesPath + mail.TemplateName + ".txt", mail.Variables);
 				if (sender == null)
 				{
 					mail.Failed = true;
