@@ -172,8 +172,8 @@ namespace MvcBlanketLibTest.ScheduleTests
         public void NextTimeToRunForOnceTasksTest()
         {
             var scheduler = CreateScheduler();
-            var startTime1 = DateTime.UtcNow.AddYears(2);
-            var startTime2 = DateTime.UtcNow.AddYears(1);
+            var startTime1 = DateTime.UtcNow.AddDays(2);
+            var startTime2 = DateTime.UtcNow.AddDays(1);
             scheduler.AddTask(
                 new ScheduledTask
                 {
@@ -257,7 +257,27 @@ namespace MvcBlanketLibTest.ScheduleTests
                     StartTime = startTime
                 });
             Thread.Sleep(1500);
-            if (Math.Abs((startTime - callWasMade).TotalMilliseconds) > 10) Assert.Fail("Call was made at wrong time");
+            if (Math.Abs((startTime - callWasMade).TotalMilliseconds) > 100) Assert.Fail("Call was made at wrong time");
+        }
+
+        [TestMethod]
+        public void TestNeverTaskCall()
+        {
+            bool callWasMade = false;
+            DateTime startTime = DateTime.UtcNow;
+            var scheduler = CreateScheduler();
+            scheduler.AddTask(
+                new ScheduledTask
+                {
+                    TaskAction = () =>
+                    {
+                        callWasMade = true;
+                    },
+                    IntervalType = IntervalTypes.Never,
+                    StartTime = startTime
+                });
+            Thread.Sleep(500);
+            Assert.IsFalse(callWasMade);
         }
 
     }

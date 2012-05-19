@@ -65,13 +65,14 @@ namespace MvcBlanketLib.Schedule
             Debug.WriteLine("TWF: {0}  NTTR: {1}", timerWillFire.ToString("mm:ss:fff"), nextTimeToRun.Value.ToString("mm:ss:fff"));
             if (timerWillFire > nextTimeToRun.Value)
             {
-                timerWillFire = nextTimeToRun.Value;
-                if (timer != null)
-                    timer.Dispose();
+                timerWillFire = nextTimeToRun.Value;               
                 TimeSpan runInterval = nextTimeToRun.Value - DateTime.UtcNow;
                 Debug.WriteLine("RI: {0}", runInterval.TotalMilliseconds);
                 if (runInterval < TimeSpan.Zero) runInterval = TimeSpan.Zero;
-                timer = new Timer(TimerCb, null, runInterval, TimeSpan.Zero);
+                if (timer == null)
+                    timer = new Timer(TimerCb, null, runInterval, TimeSpan.Zero);
+                else
+                    timer.Change(runInterval, TimeSpan.Zero);
             }
         }
 
