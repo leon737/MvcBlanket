@@ -280,5 +280,45 @@ namespace MvcBlanketLibTest.ScheduleTests
             Assert.IsFalse(callWasMade);
         }
 
+        [TestMethod]
+        public void TestPeriodicTaskWithEndTimeInThePastCall()
+        {
+            bool callWasMade = false;
+            var scheduler = CreateScheduler();
+            scheduler.AddTask(
+                new ScheduledTask
+                {
+                    TaskAction = () =>
+                    {
+                        callWasMade = true;
+                    },
+                    IntervalType = IntervalTypes.Periodic,
+                    EndTime = DateTime.UtcNow.AddDays(-1),
+                    Interval = TimeSpan.FromMilliseconds(100)
+                });
+            Thread.Sleep(500);
+            Assert.IsFalse(callWasMade);
+        }
+
+        [TestMethod]
+        public void TestOnceTaskWithEndTimeInThePastCall()
+        {
+            bool callWasMade = false;
+            var scheduler = CreateScheduler();
+            scheduler.AddTask(
+                new ScheduledTask
+                {
+                    TaskAction = () =>
+                    {
+                        callWasMade = true;
+                    },
+                    IntervalType = IntervalTypes.Once,
+                    StartTime = DateTime.UtcNow.AddMilliseconds(100),
+                    EndTime = DateTime.UtcNow.AddDays(-1)
+                });
+            Thread.Sleep(500);
+            Assert.IsTrue(callWasMade); // because EndTime for Once tasks is not taken into the account
+        }
+
     }
 }

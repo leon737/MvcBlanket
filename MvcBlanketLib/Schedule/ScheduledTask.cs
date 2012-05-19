@@ -15,40 +15,14 @@ using System;
 
 namespace MvcBlanketLib.Schedule
 {
-	public class ScheduledTask : IScheduledTask
-	{
-		public Action TaskAction { get; set; }
-	    public TimeSpan Interval { get; set; }
-	    public DateTime StartTime { get; set; }
-	    public IntervalTypes IntervalType { get; set; }
-
-
-	    //private int interval;
-        //public int Interval { get { return interval; } set { interval = value; ResetTicks(); } }
-
-        //private int remainingTicks;
-
-        //public ScheduledTask()
-        //{
-        //    ResetTicks();
-        //}
-
-        //void ResetTicks ()
-        //{
-        //    remainingTicks = Interval;
-        //}
-
-        //public bool CheckInterval()
-        //{
-        //    remainingTicks--;
-        //    if (remainingTicks == 0)
-        //    {
-        //        ResetTicks();
-        //        return true;
-        //    }
-        //    return false;
-        //}
-	}
+    public class ScheduledTask : IScheduledTask
+    {
+        public Action TaskAction { get; set; }
+        public TimeSpan Interval { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
+        public IntervalTypes IntervalType { get; set; }        
+    }
 
     public interface IScheduledTask
     {
@@ -57,6 +31,8 @@ namespace MvcBlanketLib.Schedule
         TimeSpan Interval { get; set; }
 
         DateTime StartTime { get; set; }
+
+        DateTime? EndTime { get; set; }
 
         IntervalTypes IntervalType { get; set; }
 

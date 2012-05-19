@@ -113,7 +113,7 @@ namespace MvcBlanketLib.Schedule
             {
                 return tasks.Where(
                     t => t.Enabled && (
-                    t.Task.IntervalType == IntervalTypes.Periodic ||
+                    (t.Task.IntervalType == IntervalTypes.Periodic && (!t.Task.EndTime.HasValue || t.Task.EndTime.Value > DateTime.UtcNow + t.Task.Interval)) ||
                     (t.Task.IntervalType == IntervalTypes.Once && t.Task.StartTime > DateTime.UtcNow)));
             }
         }
@@ -158,32 +158,7 @@ namespace MvcBlanketLib.Schedule
                                Math.Abs((t.NextTimeToRun - DateTime.UtcNow).TotalMilliseconds) < Jitter))));
                 return possibleTasks;
             }
-        }
-
-        //private void TimerCb(object state)
-        //{
-        //    foreach (var backgroundTask in Tasks)
-        //    {
-        //        if (backgroundTask.CheckInterval())
-        //        {
-        //            try
-        //            {
-        //                if (Monitor.TryEnter(backgroundTask))
-        //                    backgroundTask.TaskAction();
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                var log = new EventLog();
-        //                log.Source = "Application";
-        //                log.WriteEntry(ex.ToString(), EventLogEntryType.Error);
-        //            }
-        //            finally
-        //            {
-        //                Monitor.Exit(backgroundTask);
-        //            }
-        //        }
-        //    }
-        //}
+        }       
 
     }
 
