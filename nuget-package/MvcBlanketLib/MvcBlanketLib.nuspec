@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>MvcBlanketLib</id>
-    <version>0.3.4.0</version>
+    <version>0.3.5.0</version>
     <authors>Leonid Gordo</authors>
     <owners>Leonid Gordo</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
